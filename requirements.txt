@@ -1,1 +1,2 @@
+newrelic>=3.2,<3.3
 -e git+git://github.com/superdesk/newsroom.git@master#egg=Newsroom
