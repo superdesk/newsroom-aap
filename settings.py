@@ -8,3 +8,9 @@ else:
     BLUEPRINTS = [blueprint for blueprint in blueprints if 'push' not in blueprint]
 
 CORE_APPS.append('instrumentation')
+CLIENT_TIME_FORMAT = 'HH:mm'
+CLIENT_DATE_FORMAT = 'DD/MM/YYYY'
+SITE_NAME = 'AAP Newsroom'
+COPYRIGHT_HOLDER = 'AAP'
+COPYRIGHT_NOTICE = ''
+USAGE_TERMS = ''
