@@ -7,7 +7,13 @@ if os.environ.get('PUSH'):
 else:
     BLUEPRINTS = [blueprint for blueprint in blueprints if 'push' not in blueprint]
 
-CORE_APPS.append('instrumentation')
+BLUEPRINTS.append('newsroom.am_news')
+
+INSTALLED_APPS = [
+    'instrumentation',
+    'newsroom.am_news'
+]
+
 CLIENT_TIME_FORMAT = 'HH:mm'
 CLIENT_DATE_FORMAT = 'DD/MM/YYYY'
 SITE_NAME = 'AAP Newsroom'
