@@ -11,6 +11,7 @@ BLUEPRINTS.append('newsroom.am_news')
 
 INSTALLED_APPS = [
     'instrumentation',
+    'photos',
     'newsroom.am_news'
 ]
 
