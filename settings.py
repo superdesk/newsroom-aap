@@ -8,11 +8,13 @@ else:
     BLUEPRINTS = [blueprint for blueprint in blueprints if 'push' not in blueprint]
 
 BLUEPRINTS.append('newsroom.am_news')
+BLUEPRINTS.append('newsroom.market_place')
 
 INSTALLED_APPS = [
     'instrumentation',
     'photos',
-    'newsroom.am_news'
+    'newsroom.am_news',
+    'newsroom.market_place',
 ]
 
 CLIENT_TIME_FORMAT = 'HH:mm'
