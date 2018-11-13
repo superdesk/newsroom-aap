@@ -25,3 +25,8 @@ COPYRIGHT_NOTICE = ''
 USAGE_TERMS = ''
 LANGUAGES = ['en']
 DEFAULT_LANGUAGE = 'en'
+MULTIMEDIA_WEBSITE_URL = os.environ.get('MULTIMEDIA_WEBSITE_URL', 'https://photos.aap.com.au')
+MULTIMEDIA_WEBSITE_SEARCH_URL = '{}/{}/'.format(MULTIMEDIA_WEBSITE_URL,
+                                                os.environ.get('MULTIMEDIA_WEBSITE_SEARCH_PATH', 'search'))
+# Base64 Encoded Token
+AAPPHOTOS_TOKEN = os.environ.get('AAPPHOTOS_TOKEN')
