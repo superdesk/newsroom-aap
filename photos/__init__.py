@@ -1,9 +1,10 @@
 import urllib.request
 import json
 import logging
-
+from datetime import datetime
 from urllib import parse
 from flask import current_app as app
+from superdesk.utc import utc_to_local
 
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
@@ -14,7 +15,15 @@ def set_photo_coverage_href(coverage, planning_item):
             coverage['planning']['g2_content_type'] == 'picture' and \
             coverage['workflow_status'] == 'completed':
         slugline = coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
-        q = '{"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"}' % coverage['planning']['scheduled'][:10]
+        # converting the coverage schedule date to local time
+        local_date = datetime.strftime(
+            utc_to_local(
+                app.config.get('DEFAULT_TIMEZONE'),
+                datetime.strptime(coverage['planning']['scheduled'], '%Y-%m-%dT%H:%M:%S%z')
+            ),
+            '%Y-%m-%dT%H:%M:%S%z'
+        )
+        q = '{"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"}' % local_date[:10]
         return '{}"{}"?q={}'.format(app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'), slugline, q)
 
 
