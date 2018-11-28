@@ -1,0 +1,7 @@
+{% block name %}{% if name %}{{ name }},{% endif %}{% endblock %}
+{% block content %}{% endblock %}
+
+{% block footer %}
+Regards,
+The {{app_name}} Team
+{% endblock %}

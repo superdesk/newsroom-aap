@@ -1,0 +1,6 @@
+{% block name %}{% if name %}{{ name }},{% endif %}{% endblock %}
+{% block content %}{% endblock %}
+
+{% block footer %}
+© Copyright AAP ({{get_date().year}})
+{% endblock %}
