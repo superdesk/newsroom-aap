@@ -1,0 +1,13 @@
+<h2>From <a href="{{ url_for('wire.index') }}">AAP Newsroom</a> </h2>
+
+<h1>{{ item.headline }}</h1>
+
+{% if item.body_html %}{{ item.body_html | safe }}{% elif item.body_txt %}<pre>{{ item.body_txt }}</pre>{% endif %}
+
+<h3>Item Details</h3>
+<dl>
+{% if item.slugline %}<dt>Slugline:</dt><dd>{{ item.slugline }}</dd>{% endif %}
+{% if item.subject %}<dt>Category:</dt><dd>{{ item.subject|map(attribute='name')| join(', ') }}</dd>{% endif %}
+<dt>Published:</dt><dd>AAP Newsroom {{ item.versioncreated | datetime_long }}</dd>
+<dt>Original Article:</dt><dd><a href="{{ url_for_wire(item) }}">{{ url_for_wire(item) }}</a></dd>
+</dl>

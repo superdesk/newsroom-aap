@@ -1,0 +1,8 @@
+{% block name %}{% if name %}<p>{{ name }},</p>
+
+{% endif %}{% endblock %}
+{% block content %}{% endblock %}
+
+{% block footer %}
+    <p>&copy; <a href="{{ url_for('public.copyright') }}">Copyright AAP ({{get_date().year}}) </a></p>
+{% endblock %}

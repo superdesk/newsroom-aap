@@ -1,0 +1,9 @@
+{% extends "user_email_layout.txt" %}
+{% block content %}
+An {{app_name}} account has been created for you.
+In order to access your account, please visit {{url}} and complete your registration.
+
+This link will expire after {{expires}} hours.
+
+If you believe the {{app_name}} account was created in error, please ignore this email.
+{% endblock %}

@@ -1,0 +1,12 @@
+From {{url_for('wire.index')}}
+
+{{ item.headline }}
+
+{% if item.body_txt %}{{ item.body_txt }}{% elif item.body_html %}{{ item.body_html | plain_text }}{% endif %}
+
+Item Details:
+{% if item.slugline %}Slugline: {{ item.slugline }}{% endif %}
+{% if item.headline %}Headline: {{ item.headline }}{% endif %}
+{% if item.subject %}Category: {{ item.subject|map(attribute='name')| join(', ') }}{% endif %}
+Published: AAP Newsroom {{ item.versioncreated | datetime_long }}
+Original Article: {{ url_for_wire(item) }}
