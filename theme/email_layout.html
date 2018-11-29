@@ -4,5 +4,5 @@
 {% block content %}{% endblock %}
 
 {% block footer %}
-    <p>&copy; <a href="{{ url_for('public.copyright') }}">Copyright AAP ({{get_date().year}}) </a></p>
+    <p>&copy; <a href="{{ url_for('public.copyright', _external=True) }}">Copyright AAP</a>({{get_date().year}}) </p>
 {% endblock %}

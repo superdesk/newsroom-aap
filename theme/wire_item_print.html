@@ -1,0 +1,37 @@
+{% extends "print_layout.html" %}
+
+{% block title %}{{ item.headline }}{% endblock %}
+
+{% block content %}
+<article>
+    <section class="print-content__header">
+        <h3>Item Details</h3>
+
+        {% if item.slugline %}<p><b>Slugline:</b> {{ item.slugline }}</p> {% endif %}
+        {% if item.subject %}<p><b>Category:</b> {{ item.subject|join(', ', attribute='name')}}</p>{% endif %}
+        {% if item.source %}<p><b>Source:</b> {{ item.source }}</p> {% endif %}
+        <p><b>Published:</b> AAP Newsroom {{ item.versioncreated|datetime_long }}</p>
+    </section>
+    <section class="print-content__body">
+        <h1>{{ item.headline }}</h1>
+        {% if item.byline and item.byline.lower().startswith('by ') %}
+            <p>{{ item.byline }}</p>
+        {% endif %}
+        {% if item.byline and not item.byline.lower().startswith('by ') %}
+            {{ _('By: ') }}<p>{{ item.byline }}</p>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                {% if item.description_html %}
+                <div class="lead">
+                    {{ item.description_html | safe }}
+                </div>
+                {% endif %}
+
+                {{ item.body_html | safe }}
+            </div>
+        </div>
+    </section>
+</article>
+{% endblock %}
