@@ -49,6 +49,7 @@ def get_media_cards_external(card):
         return app.cache.get(cache_key)
 
     cards = []
+    assets = set()
     for item in card.get('config').get('sources'):
         if not item.get('url'):
             continue
@@ -66,7 +67,11 @@ def get_media_cards_external(card):
                     )
                 })
         elif data.get('Assets'):
-            for asset in data.get('Assets')[:count]:
+            asset_count = 0
+            for asset in data.get('Assets'):
+                asset_id = asset.get('AssetId')
+                if asset_count >= count:
+                    break
                 parsed_url = parse.parse_qsl(item.get('url'))
                 search = None
                 query_string = []
@@ -85,11 +90,14 @@ def get_media_cards_external(card):
                         parse.urlencode(query_string)
                     )
 
-                cards.append({
-                    'media_url': asset.get('Layout', {}).get('Href'),
-                    'description': asset.get('Title'),
-                    'href': href
-                })
+                if asset_count < count and asset_id not in assets:
+                    cards.append({
+                        'media_url': asset.get('Layout', {}).get('Href'),
+                        'description': asset.get('Title'),
+                        'href': href
+                    })
+                    assets.add(asset_id)
+                    asset_count += 1
 
     app.cache.set(cache_key, cards, timeout=300)
     return cards
