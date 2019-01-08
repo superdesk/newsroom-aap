@@ -1,6 +1,6 @@
 
 import os
-from newsroom.default_settings import BLUEPRINTS as blueprints, CORE_APPS
+from newsroom.default_settings import BLUEPRINTS as blueprints, CORE_APPS, CLIENT_CONFIG
 
 if os.environ.get('PUSH'):
     BLUEPRINTS = blueprints
@@ -28,3 +28,4 @@ DEFAULT_LANGUAGE = 'en'
 MULTIMEDIA_WEBSITE_URL = os.environ.get('MULTIMEDIA_WEBSITE_URL', 'https://photos.aap.com.au')
 MULTIMEDIA_WEBSITE_SEARCH_URL = '{}/{}/'.format(MULTIMEDIA_WEBSITE_URL,
                                                 os.environ.get('MULTIMEDIA_WEBSITE_SEARCH_PATH', 'search'))
+CLIENT_CONFIG['list_animations'] = False
