@@ -1,24 +1,27 @@
 {% extends "layout.html" %}
 
 {% block topnav %}
+    {% set ns = namespace(currentNav=None) %}
+    {% for group in range(0, 10) %}
+        {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
+            {% if request.endpoint == nav.endpoint %}
+                {% set ns.currentNav = nav %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
     <div class="navbar-header">
         <nav class="navbar navbar-header_0 divider">
             {% include 'logo.html' %}
             <div class="navbar-brand d-flex align-items-center ml-0 ml-sm-1 ml-md-2 mr-0 mr-sm-4">
                 <nav>
-                    {% block breadcrumb %}{% endblock %}
+                    <span class="breadcrumb-item active d-sm-none d-block">{{ gettext(ns.currentNav.get('name')) }}</span>
+                    <span id="nav-breadcrumb" class="breadcrumb-item active"></span>
                 </nav>
             </div>
             {% include "topnav_controls.html" %}
         </nav>
-        <nav class="navbar-header_1 navbar-header_1--small">
-            {% for group in range(0, 10) %}
-                {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
-                    {% if request.endpoint == nav.endpoint %}
-                    {{  gettext(nav.get('name').lower()) if nav.get('name') != 'aapX' else nav.name }}
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
+        <nav class="navbar-header_1 navbar-header_1--small d-none d-sm-block">
+            {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') != 'aapX' else ns.currentNav.name }}
         </nav>
     </div>
 {% endblock %}

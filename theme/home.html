@@ -4,13 +4,13 @@
     <div class="navbar-header">
         <nav class="navbar navbar-header_0 divider">
             {% include 'logo.html' %}
-            <div class="mr-3 d-none d-md-block navbar-header_tagline">{{ gettext('EVERY TOOL   ·   EVERY ADVANTAGE   ·   EVERYTHING NEWSROOMS NEED') }}</div>
+            <div class="mr-3 d-none d-xl-block navbar-header_tagline">{{ gettext('EVERY TOOL   ·   EVERY ADVANTAGE   ·   EVERYTHING NEWSROOMS NEED') }}</div>
             {% include "topnav_controls.html" %}
         </nav>
-        <nav class="navbar-header_1 divider mr-3 d-none d-md-block">
+        <nav class="navbar-header_1 navbar-header_1--small divider mr-3 d-none d-sm-block">
             {{ gettext(' aap newsroom ') }}
         </nav>
-        <div class="mr-3 d-none d-md-block">
+        <div class="mr-3 d-none d-sm-block">
             <div class="navbar-header_nav_links">
             {% for group in range(0, 10) %}
                 {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
