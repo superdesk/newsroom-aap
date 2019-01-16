@@ -1,0 +1,30 @@
+{% extends "home_default.html" %}
+
+{% block topnav %}
+    <div class="navbar-header">
+        <nav class="navbar navbar-header_0 divider">
+            {% include 'logo.html' %}
+            <div class="mr-3 d-none d-xl-block navbar-header_tagline">{{ gettext('EVERY TOOL   ·   EVERY ADVANTAGE   ·   EVERYTHING NEWSROOMS NEED') }}</div>
+            {% include "topnav_controls.html" %}
+        </nav>
+        <nav class="navbar-header_1 navbar-header_1--small divider mr-3 d-none d-sm-block">
+            {{ gettext(' aap newsroom ') }}
+        </nav>
+        <div class="mr-3 d-none d-sm-block">
+            <div class="navbar-header_nav_links">
+            {% for group in range(0, 10) %}
+                {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
+                    {% if request.endpoint != nav.endpoint and nav.group != 1 %}
+                    <div>
+                        <a href="{{ url_for(nav.endpoint) if nav.endpoint else nav.url }}"
+                            {% if nav.url %}target="_blank"{% endif %}
+                        >{{  gettext(nav.name) }}
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

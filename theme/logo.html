@@ -1,0 +1,10 @@
+<div class="navbar__logo">
+    {% if request.path == "/" %}
+    <a href="{{ url_for('wire.index') }}" class="navbar__logo--small d-none d-sm-block">
+        <img src="{{ url_for('theme', filename = 'logo/logo-AAP.png') }}" alt="{{ config.SITE_NAME }}"/>
+    </a>
+    {% endif %}
+    <a href="{{ url_for('wire.index') }}" {% if request.path == "/" %}class="d-sm-none"{% endif %}>
+        <img src="{{ url_for('theme', filename = 'logo.svg') }}" alt="{{ config.SITE_NAME }}"/>
+    </a>
+</div>
