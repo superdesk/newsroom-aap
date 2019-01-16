@@ -6,6 +6,8 @@ from urllib import parse
 from flask import current_app as app
 from superdesk.utc import utc_to_local
 
+from .external_products import register_products
+
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
 
@@ -106,3 +108,4 @@ def get_media_cards_external(card):
 def init_app(app):
     app.set_photo_coverage_href = set_photo_coverage_href
     app.get_media_cards_external = get_media_cards_external
+    register_products(app)

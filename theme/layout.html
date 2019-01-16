@@ -1,0 +1,31 @@
+{% extends "base_layout.html" %}
+
+{% block topnav %}
+    <div class="navbar-header">
+        <nav class="navbar navbar-header_0 divider">
+            {% include 'logo.html' %}
+            <div class="navbar-brand d-flex align-items-center ml-0 ml-sm-1 ml-md-2 mr-0 mr-sm-4">
+                <nav>
+                    {% block breadcrumb %}{% endblock %}
+                </nav>
+            </div>
+            {% include "topnav_controls.html" %}
+        </nav>
+    </div>
+{% endblock %}
+
+{% block default_navs %}
+    {% for nav in sidenavs_by_names(['Home', 'Saved Items'], request.blueprint) %}
+        {% include "sidenav_icon.html" %}
+    {% endfor %}
+    <div class="divider"></div>
+    {% for nav in sidenavs_by_group(0, request.blueprint) %}
+        {% if nav.get('name') != 'Home' %}
+        {% include "sidenav_icon.html" %}
+        {% endif %}
+    {% endfor %}
+    <div class="divider"></div>
+    {% for nav in sidenavs_by_group(2, request.blueprint) %}
+        {% include "sidenav_icon.html" %}
+    {% endfor %}
+{% endblock %}
