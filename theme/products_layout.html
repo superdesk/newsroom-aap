@@ -4,7 +4,7 @@
     {% set ns = namespace(currentNav=None) %}
     {% for group in range(0, 10) %}
         {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
-            {% if request.endpoint == nav.endpoint %}
+            {% if request.endpoint == nav.endpoint or request.endpoint in nav.secondary_endpoints %}
                 {% set ns.currentNav = nav %}
             {% endif %}
         {% endfor %}
