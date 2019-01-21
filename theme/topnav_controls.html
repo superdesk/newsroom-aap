@@ -1,14 +1,14 @@
 {% if session.get('name') %}
 <div class="form-inline my-lg-0 ml-auto">
     <div class="mr-2 d-none d-md-block">{{ get_date() | date_header }}</div>
-    <div class="notif" id="header-notification"></div>
+    <div class="notif notif--small" id="header-notification"></div>
     <div id="header-profile-toggle" class="header-profile-toggle--small"></div>
 </div>
 {% else %}
 <div class="form-inline my-lg-0 ml-auto pr-2 pr-sm-3">
     <div class="mr-3 d-none d-md-block">{{ get_date() | date_header }}</div>
-    <a class="nav-link" href="{{ url_for('auth.login') }}">{{ gettext('Login') }}</a>
-    <a class="nav-link"
+    <a class="nav-link nav-link--small" href="{{ url_for('auth.login') }}">{{ gettext('Login') }}</a>
+    <a class="nav-link nav-link--small"
        href="{{ config.CONTACT_ADDRESS }}"
        target="_blank">{{ gettext('Contact Us') }}</a>
 </div>
