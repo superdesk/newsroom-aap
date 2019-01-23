@@ -15,17 +15,17 @@
 {% endblock %}
 
 {% block default_navs %}
-    {% for nav in sidenavs_by_names(['Home', 'Saved Items'], request.blueprint) %}
-        {% include "sidenav_icon.html" %}
+    {% for nav in sidenavs_by_names(['Home', 'Saved/Watched Items'], request.blueprint) %}
+        {% include "sidenav_icon_no_url.html" %}
     {% endfor %}
     <div class="divider"></div>
     {% for nav in sidenavs_by_group(0, request.blueprint) %}
         {% if nav.get('name') != 'Home' %}
-        {% include "sidenav_icon.html" %}
+        {% include "sidenav_icon_no_url.html" %}
         {% endif %}
     {% endfor %}
     <div class="divider"></div>
     {% for nav in sidenavs_by_group(2, request.blueprint) %}
-        {% include "sidenav_icon.html" %}
+        {% include "sidenav_icon_no_url.html" %}
     {% endfor %}
 {% endblock %}
