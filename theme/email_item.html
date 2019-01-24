@@ -7,5 +7,5 @@
     {% if item.slugline %}<li style="margin-left: 0px"><b>Slugline:</b> {{ item.slugline }}</li>{% endif %}
     {% if item.subject %}<li style="margin-left: 0px"><b>Category:</b> {{ item.subject|map(attribute='name')| join(', ') }}</li>{% endif %}
     <li style="margin-left: 0px"><b>Published:</b> <a href="{{ url_for('wire.index', _external=True) }}">AAP Newsroom</a> {{ item.versioncreated | datetime_long }}</li>
-    <li style="margin-left: 0px"><b>Original Article:</b> <a href="{{ url_for_wire(item) }}">{{ url_for_wire(item) }}</a></li>
+    <li style="margin-left: 0px"><b>Original Article:</b> <a href="{{ url_for_wire(item, True, section) }}">{{ url_for_wire(item, True, section) }}</a></li>
 </ul>

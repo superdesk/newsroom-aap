@@ -9,4 +9,4 @@ Item Details:
 {% if item.headline %}Headline: {{ item.headline }}{% endif %}
 {% if item.subject %}Category: {{ item.subject|map(attribute='name')| join(', ') }}{% endif %}
 Published: AAP Newsroom {{ item.versioncreated | datetime_long }}
-Original Article: {{ url_for_wire(item) }}
+Original Article: {{ url_for_wire(item, True, section) }}
