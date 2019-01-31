@@ -24,7 +24,7 @@
         </nav>
         {% if ns.currentNav %}
         <nav class="navbar-header_1 navbar-header_1--small d-none d-sm-block">
-            {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') != 'aapX' else ns.currentNav.name }}
+            {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') not in ['aapX', 'AM'] else ns.currentNav.name }}
         </nav>
         {% endif %}
     </div>
