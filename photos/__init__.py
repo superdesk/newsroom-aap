@@ -39,7 +39,7 @@ def _fetch_photos(url):
             json_data = json.loads(data.decode("utf-8"))
             return json_data
     except Exception:
-        return []
+        return {}
 
 
 def get_media_cards_external(card):
