@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'photos',
     'newsroom.am_news',
     'newsroom.market_place',
+    'newsroom-defaults',
 ]
 
 CLIENT_TIME_FORMAT = 'HH:mm'
