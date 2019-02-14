@@ -1,12 +1,15 @@
 import urllib.request
 import json
 import logging
+from PIL import Image
 from datetime import datetime
 from urllib import parse
 from flask import current_app as app
 from superdesk.utc import utc_to_local
 
 from .external_products import register_products
+from newsroom.upload import ASSETS_RESOURCE
+from newsroom.media_utils import store_image, get_thumbnail, get_watermark
 
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
@@ -105,7 +108,26 @@ def get_media_cards_external(card):
     return cards
 
 
+def generate_preview_details_renditions(picture):
+    """Generate preview and details rendition"""
+    if not picture or not picture.get('renditions') or not picture.get('renditions').get('16-9'):
+        logger.warning('Invalid renditions. picture: {}'.format(picture))
+        return
+
+    # add watermark to base/view images
+    rendition = picture.get('renditions', {}).get('16-9')
+    if rendition:
+        binary = app.media.get(rendition['media'], resource=ASSETS_RESOURCE)
+        im = Image.open(binary)
+        watermark = get_watermark(im)
+        custom = store_image(watermark, _id='%s%s' % (rendition['media'], '_newsroom_custom'))
+        picture['renditions'].update({
+            '_newsroom_custom': custom,
+        })
+
+
 def init_app(app):
     app.set_photo_coverage_href = set_photo_coverage_href
     app.get_media_cards_external = get_media_cards_external
+    app.generate_preview_details_renditions = generate_preview_details_renditions
     register_products(app)
