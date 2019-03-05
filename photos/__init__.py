@@ -16,15 +16,19 @@ logger = logging.getLogger(__name__)
 
 
 def set_photo_coverage_href(coverage, planning_item):
-    if app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL') and \
-            coverage['planning']['g2_content_type'] == 'picture' and \
-            coverage['workflow_status'] == 'completed':
-        slugline = coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
+    plan_coverage = next(
+        (c for c in planning_item.get('coverages') or [] if c.get('coverage_id') == coverage.get('coverage_id')),
+        None
+    )
+    if plan_coverage and app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL') and \
+            plan_coverage['planning']['g2_content_type'] == 'picture' and \
+            plan_coverage['workflow_status'] == 'completed':
+        slugline = plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
         # converting the coverage schedule date to local time
         local_date = datetime.strftime(
             utc_to_local(
                 app.config.get('DEFAULT_TIMEZONE'),
-                datetime.strptime(coverage['planning']['scheduled'], '%Y-%m-%dT%H:%M:%S%z')
+                datetime.strptime(plan_coverage['planning']['scheduled'], '%Y-%m-%dT%H:%M:%S%z')
             ),
             '%Y-%m-%dT%H:%M:%S%z'
         )
