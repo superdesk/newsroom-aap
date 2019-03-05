@@ -9,6 +9,8 @@ else:
 
 BLUEPRINTS.append('newsroom.am_news')
 BLUEPRINTS.append('newsroom.market_place')
+BLUEPRINTS.append('aap_public')
+
 
 INSTALLED_APPS = [
     'instrumentation',
