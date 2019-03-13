@@ -35,5 +35,5 @@ VIDEOS_WEBSITE_URL = os.environ.get('VIDEOS_WEBSITE_URL', 'https://photos.aap.co
 EXPLAINERS_WEBSITE_URL = os.environ.get('EXPLAINERS_WEBSITE_URL',
                                         'https://photos.aap.com.au/search/(supplementalcategory'
                                         ':VIDEXP)/Visual%20Explainers')
-FACTCHECK_WEBSITE_URL = os.environ.get('FACTCHECK_WEBSITE_URL', 'https://crosscheck.aap.com.au/')
+FACTCHECK_WEBSITE_URL = os.environ.get('FACTCHECK_WEBSITE_URL', 'https://factcheck.aap.com.au/')
 CLIENT_CONFIG['list_animations'] = False
