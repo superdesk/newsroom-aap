@@ -2,10 +2,8 @@ import urllib.request
 import json
 import logging
 from PIL import Image
-from datetime import datetime
 from urllib import parse
 from flask import current_app as app
-from superdesk.utc import utc_to_local
 
 from .external_products import register_products
 from newsroom.upload import ASSETS_RESOURCE
@@ -20,20 +18,17 @@ def set_photo_coverage_href(coverage, planning_item):
         (c for c in planning_item.get('coverages') or [] if c.get('coverage_id') == coverage.get('coverage_id')),
         None
     )
-    if plan_coverage and app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL') and \
-            plan_coverage['planning']['g2_content_type'] == 'picture' and \
-            plan_coverage['workflow_status'] == 'completed':
-        slugline = plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
-        # converting the coverage schedule date to local time
-        local_date = datetime.strftime(
-            utc_to_local(
-                app.config.get('DEFAULT_TIMEZONE'),
-                datetime.strptime(plan_coverage['planning']['scheduled'], '%Y-%m-%dT%H:%M:%S%z')
-            ),
-            '%Y-%m-%dT%H:%M:%S%z'
-        )
-        q = '{"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"}' % local_date[:10]
-        return '{}"{}"?q={}'.format(app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'), slugline, q)
+    content_type = plan_coverage['planning']['g2_content_type']
+    if content_type not in ['picture', 'video', 'video_explainer'] or \
+                    plan_coverage['workflow_status'] != 'completed' or \
+            not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'):
+        return
+
+    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"' % plan_coverage['planning']['scheduled'][:10]
+    media_type = 'image' if content_type == 'picture' else 'video'
+    slugline = plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
+    return '{}"{}"?q={{"MediaTypes":["{}"],{}}}'.format(app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
+                                                        slugline, media_type, date_range_filter)
 
 
 def _fetch_photos(url):
