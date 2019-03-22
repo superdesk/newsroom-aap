@@ -37,3 +37,7 @@ EXPLAINERS_WEBSITE_URL = os.environ.get('EXPLAINERS_WEBSITE_URL',
                                         ':VIDEXP)/Visual%20Explainers')
 FACTCHECK_WEBSITE_URL = os.environ.get('FACTCHECK_WEBSITE_URL', 'https://factcheck.aap.com.au/')
 CLIENT_CONFIG['list_animations'] = False
+BACK_STORY_URL = os.environ.get('BACK_STORY_URL', 'https://backstory.aap.com.au/')
+MEDIA_RELEASES_URL = os.environ.get('MEDIA_RELEASES_URL',
+                                    'https://newsroom.aap.com.au/wire?navigation=5ac6ae2cbdd78136968b65cd')
+
