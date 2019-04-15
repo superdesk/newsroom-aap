@@ -7,7 +7,5 @@ def register_products(app):
                 url=app.config.get('EXPLAINERS_WEBSITE_URL'), group=2)
     app.sidenav('FactCheck', icon='fact-check',
                 url=app.config.get('FACTCHECK_WEBSITE_URL'), group=2)
-    app.sidenav('Media Releases', icon='factory',
-                url=app.config.get('MEDIA_RELEASES_URL'), group=2)
     app.sidenav('Back Story', icon='books',
                 url=app.config.get('BACK_STORY_URL'), group=2)
