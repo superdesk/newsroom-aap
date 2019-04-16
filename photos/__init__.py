@@ -24,11 +24,20 @@ def set_photo_coverage_href(coverage, planning_item):
             not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'):
         return
 
-    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"' % plan_coverage['planning']['scheduled'][:10]
-    media_type = 'image' if content_type == 'picture' else 'video'
+    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"' % plan_coverage['planning'][
+                                                                                        'scheduled'][:10]
     slugline = plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
-    return '{}"{}"?q={{"MediaTypes":["{}"],{}}}'.format(app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
-                                                        slugline, media_type, date_range_filter)
+    keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % slugline
+
+    if content_type == 'video':
+        return '{}(credit:"aap video") OR (credit:"pr video")/AAP VIDEO?q={{{}, {}}}'.format(
+            app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
+            keyword_filter, date_range_filter)
+    elif content_type == 'video_explainer':
+        return '{}?q={{{}, {}}}'.format(app.config.get('EXPLAINERS_WEBSITE_URL'), keyword_filter, date_range_filter)
+    else:
+        return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
+                                                            slugline, date_range_filter)
 
 
 def _fetch_photos(url):
