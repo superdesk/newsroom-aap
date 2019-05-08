@@ -19,9 +19,11 @@ def set_photo_coverage_href(coverage, planning_item):
         None
     )
     content_type = plan_coverage['planning']['g2_content_type']
-    if content_type not in ['picture', 'video', 'video_explainer'] or \
-                    plan_coverage['workflow_status'] != 'completed' or \
-            not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'):
+    if plan_coverage['workflow_status'] != 'completed' or \
+                (content_type in ['picture', 'video', ] and \
+            not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL')) or \
+                (content_type == 'video_explainer' and \
+            not app.config.get('EXPLAINERS_WEBSITE_URL')):
         return
 
     date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"' % plan_coverage['planning'][
