@@ -3,5 +3,5 @@ newrelic>=3.2,<3.3
 git+git://github.com/superdesk/superdesk-core.git@fb0025e#egg=Superdesk-Core
 
 # Newsroom 1.13.1 - https://github.com/superdesk/newsroom/releases/tag/v1.13.1
--e git+git://github.com/superdesk/newsroom.git@300cd4b#egg=Newsroom
+-e git+git://github.com/superdesk/newsroom.git@ef36867#egg=Newsroom
 git+git://github.com/superdesk/superdesk-planning.git@1.1#egg=superdesk-planning
