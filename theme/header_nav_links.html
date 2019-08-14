@@ -1,0 +1,16 @@
+<div class="mr-3 d-none d-sm-block">
+    <div class="navbar-header_nav_links">
+    {% for group in range(0, 10) %}
+        {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
+            {% if request.endpoint != nav.endpoint and nav.group != 1 %}
+            <div>
+                <a href="{{ url_for(nav.endpoint) if nav.endpoint else nav.url }}"
+                    {% if nav.url %}target="_blank"{% endif %}
+                >{{  gettext(nav.name) }}
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    </div>
+</div>
