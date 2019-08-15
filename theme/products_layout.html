@@ -23,9 +23,10 @@
             {% include "topnav_controls.html" %}
         </nav>
         {% if ns.currentNav %}
-        <nav class="navbar-header_1 navbar-header_1--small d-none d-sm-block">
+        <nav class="navbar-header_1 navbar-header_1--small divider mr-3 d-none d-sm-block">
             {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') not in ['aapX', 'AM'] else ns.currentNav.name }}
         </nav>
+        {% include 'header_nav_links.html' %}
         {% endif %}
     </div>
 {% endblock %}
