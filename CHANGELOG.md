@@ -1,5 +1,8 @@
 # AAP Newsroom Changelog
 
+## [1.14] 2019-08-22
+- [SDAN-515] Show hyperlinks bar in all relevant sections
+
 ## [1.13] 2019-07-15
 - [SDAN-528] fix: Update email template using changes from SDAN-514
 
