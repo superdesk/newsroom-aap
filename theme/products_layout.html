@@ -12,18 +12,18 @@
     <div class="navbar-header">
         <nav class="navbar navbar-header_0 divider">
             {% include 'logo.html' %}
-            <div class="navbar-brand d-flex align-items-center ml-0 ml-sm-1 ml-md-2 mr-0 mr-sm-4">
+            <div class="navbar-brand d-flex align-items-center ml-0 ml-sm-1 ml-md-2 mr-0 mr-sm-4 overflow-hidden flex-grow-1">
                 <nav>
                     {% if ns.currentNav %}
                     <span class="breadcrumb-item active d-sm-none d-block">{{ gettext(ns.currentNav.get('name')) }}</span>
                     {% endif %}
-                    <span id="nav-breadcrumb" class="breadcrumb-item active"></span>
+                    <span id="nav-breadcrumb" class="breadcrumb-item active breadcrumb-sub-item"></span>
                 </nav>
             </div>
             {% include "topnav_controls.html" %}
         </nav>
         {% if ns.currentNav %}
-        <nav class="navbar-header_1 navbar-header_1--small divider mr-3 d-none d-sm-block">
+        <nav class="navbar-header_1 navbar-header_1--small divider mr-3 d-none d-md-p-block d-lg-l-block">
             {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') not in ['aapX', 'AM'] else ns.currentNav.name }}
         </nav>
         {% include 'header_nav_links.html' %}
