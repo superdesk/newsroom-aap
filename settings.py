@@ -13,6 +13,12 @@ BLUEPRINTS.append('newsroom.media_releases')
 BLUEPRINTS.append('aap_public')
 
 
+# We want the section filter to be last
+# So we remove it from CORE_APPS and place after
+# aapX/Media Releases etc
+if 'newsroom.news_api' in CORE_APPS:
+    CORE_APPS.remove('newsroom.news_api')
+
 INSTALLED_APPS = [
     'instrumentation',
     'photos',
@@ -20,6 +26,7 @@ INSTALLED_APPS = [
     'newsroom.market_place',
     'newsroom.media_releases',
     'newsroom-defaults',
+    'newsroom.news_api',
 ]
 
 CLIENT_TIME_FORMAT = 'HH:mm'
