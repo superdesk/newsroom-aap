@@ -1,4 +1,6 @@
 # AAP Newsroom Changelog
+## [1.14.1] 2019-08-27
+- [SDAN-587] Ignore agenda when applying time limit to search (#836)
 
 ## [1.14] 2019-08-22
 - [SDAN-515] Show hyperlinks bar in all relevant sections
