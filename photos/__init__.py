@@ -26,7 +26,7 @@ def set_photo_coverage_href(coverage, planning_item):
             not app.config.get('EXPLAINERS_WEBSITE_URL')):
         return
 
-    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"true"' % plan_coverage['planning'][
+    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"false"' % plan_coverage['planning'][
                                                                                         'scheduled'][:10]
     slugline = plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
     keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % slugline
