@@ -1,4 +1,4 @@
-<div class="mr-3 d-none d-sm-block">
+<div class="mr-3 d-none d-md-p-block d-lg-l-block">
     <div class="navbar-header_nav_links">
     {% for group in range(0, 10) %}
         {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
