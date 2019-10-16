@@ -28,8 +28,14 @@ def set_photo_coverage_href(coverage, planning_item):
 
     date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"false"' % plan_coverage['planning'][
                                                                                         'scheduled'][:10]
-    slugline = plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
-    keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % slugline
+    slugline = parse.quote(
+        '\\"{}\\"'.format(
+            plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
+        )
+    )
+    keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % (
+        slugline
+    )
 
     if content_type == 'video':
         return '{}(credit:"aap video") OR (credit:"pr video")/AAP VIDEO?q={{{}, {}}}'.format(
