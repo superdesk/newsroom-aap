@@ -29,12 +29,10 @@ def set_photo_coverage_href(coverage, planning_item):
     date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"false"' % plan_coverage['planning'][
                                                                                         'scheduled'][:10]
     slugline = parse.quote(
-        '\\"{}\\"'.format(
-            plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
-        )
+        plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
     )
     keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % (
-        slugline
+        '\\"{}\\"'.format(slugline)
     )
 
     if content_type == 'video':
@@ -44,8 +42,10 @@ def set_photo_coverage_href(coverage, planning_item):
     elif content_type == 'video_explainer':
         return '{}?q={{{}, {}}}'.format(app.config.get('EXPLAINERS_WEBSITE_URL'), keyword_filter, date_range_filter)
     else:
-        return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
-                                                            slugline, date_range_filter)
+        return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(
+            app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
+            slugline, date_range_filter
+        )
 
 
 def _fetch_photos(url):
