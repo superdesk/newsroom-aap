@@ -1,5 +1,8 @@
 # AAP Newsroom Changelog
 
+## [1.16.0] 2019-10-31
+- (fix): Double quotes were used in photo urls (#57)
+
 ## [1.15.2] 2019-10-17
 - [SDAN-601] (fix): Place quotes around slugline for AAP Photos url (#55)
 
