@@ -4,10 +4,12 @@ import logging
 from PIL import Image
 from urllib import parse
 from flask import current_app as app
+from datetime import timedelta
 
 from .external_products import register_products
 from newsroom.upload import ASSETS_RESOURCE
 from newsroom.media_utils import store_image, get_thumbnail, get_watermark
+from newsroom.utils import parse_date_str
 
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
@@ -26,8 +28,12 @@ def set_photo_coverage_href(coverage, planning_item):
             not app.config.get('EXPLAINERS_WEBSITE_URL')):
         return
 
-    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"false"' % plan_coverage['planning'][
-                                                                                        'scheduled'][:10]
+    scheduled = parse_date_str(plan_coverage['planning']['scheduled'])
+    from_date = scheduled - timedelta(hours=8)
+    to_date = scheduled + timedelta(hours=2)
+
+    date_range_filter = '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"' %(
+        from_date.strftime('%Y-%m-%dT%H:%M:%S'), to_date.strftime('%Y-%m-%dT%H:%M:%S'))
     slugline = parse.quote(
         plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
     )
