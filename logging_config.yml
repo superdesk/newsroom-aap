@@ -1,0 +1,17 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+  simple:
+    format: '%(asctime)s %(message)s level=%(levelname)s function=%(funcName)s process=%(processName)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    stream  : ext://sys.stdout
+    formatter: simple
+loggers:
+  newsroom:
+    handlers: [console]
+    level: INFO
+  root:
+    handlers: [console]
+
