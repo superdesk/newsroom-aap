@@ -15,7 +15,7 @@ AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
 
 
-def set_photo_coverage_href(coverage, planning_item):
+def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
     plan_coverage = next(
         (c for c in planning_item.get('coverages') or [] if c.get('coverage_id') == coverage.get('coverage_id')),
         None
@@ -28,7 +28,7 @@ def set_photo_coverage_href(coverage, planning_item):
             not app.config.get('EXPLAINERS_WEBSITE_URL')):
         return
 
-    scheduled = utcnow()
+    scheduled = (deliveries[0] or {}).get('publish_time') if len(deliveries) > 0 else utcnow()
     from_date = scheduled - timedelta(hours=8)
     to_date = scheduled + timedelta(hours=2)
 
