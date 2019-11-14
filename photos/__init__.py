@@ -9,7 +9,7 @@ from datetime import timedelta
 from .external_products import register_products
 from newsroom.upload import ASSETS_RESOURCE
 from newsroom.media_utils import store_image, get_thumbnail, get_watermark
-from newsroom.utils import parse_date_str
+from superdesk.utc import utcnow
 
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def set_photo_coverage_href(coverage, planning_item):
             not app.config.get('EXPLAINERS_WEBSITE_URL')):
         return
 
-    scheduled = parse_date_str(plan_coverage['planning']['scheduled'])
+    scheduled = utcnow()
     from_date = scheduled - timedelta(hours=8)
     to_date = scheduled + timedelta(hours=2)
 
