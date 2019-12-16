@@ -1,5 +1,13 @@
 # AAP Newsroom Changelog
 
+## [1.17.0-rc1] Not released yet
+- [SDAN-612] Sending a UTC date range to search for photos for picture coverages (#60)
+- [SDAN-603] Display timestamp on application logs (#61)
+- [SDAN-613] Provide byline/hyperlink for featuremedia images (#63)
+- [SDAN-616] Use current time to populate date filter for media hrefs (#62)
+- [SDAN-610] Photo coverage URL should not be generated on push but on get from the client (#64)
+- [SDAN-620] Improvements to coverage inquiry email (#65)
+
 ## [1.16.0] 2019-10-31
 - (fix): Double quotes were used in photo urls (#57)
 
