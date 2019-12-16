@@ -4,33 +4,41 @@ import logging
 from PIL import Image
 from urllib import parse
 from flask import current_app as app
+from datetime import timedelta
 
 from .external_products import register_products
 from newsroom.upload import ASSETS_RESOURCE
 from newsroom.media_utils import store_image, get_thumbnail, get_watermark
+from superdesk.utc import utcnow
+from newsroom.utils import parse_date_str
 
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
 
 
-def set_photo_coverage_href(coverage, planning_item):
+def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
     plan_coverage = next(
-        (c for c in planning_item.get('coverages') or [] if c.get('coverage_id') == coverage.get('coverage_id')),
-        None
+        (c for c in (planning_item or {}).get('coverages') or [] if c.get('coverage_id') == coverage.get('coverage_id'))
+        ,coverage
     )
-    content_type = plan_coverage['planning']['g2_content_type']
-    if plan_coverage['workflow_status'] != 'completed' or \
+    content_type = plan_coverage.get('coverage_type') or (plan_coverage.get('planning') or {}).get('g2_content_type')
+    if not plan_coverage or plan_coverage['workflow_status'] != 'completed' or \
                 (content_type in ['picture', 'video', ] and \
             not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL')) or \
                 (content_type == 'video_explainer' and \
             not app.config.get('EXPLAINERS_WEBSITE_URL')):
         return
 
-    date_range_filter = '"DateRange":[{"Start":"%s"}],"DateCreatedFilter":"false"' % plan_coverage['planning'][
-                                                                                        'scheduled'][:10]
-    slugline = parse.quote(
-        plan_coverage.get('planning', {}).get('slugline', planning_item.get('slugline'))
-    )
+    slugline = parse.quote(plan_coverage.get('slugline') or (plan_coverage.get('planning', {}).get('slugline',
+                                                                                                   (planning_item or {})
+                                                                                                   .get('slugline'))))
+    scheduled = parse_date_str(deliveries[0]['publish_time']) if len(deliveries) > 0 and \
+                                                                 (deliveries[0] or {}).get('publish_time') else utcnow()
+    from_date = scheduled - timedelta(hours=8)
+    to_date = scheduled + timedelta(hours=2)
+
+    date_range_filter = '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"' %(
+        from_date.strftime('%Y-%m-%dT%H:%M:%S'), to_date.strftime('%Y-%m-%dT%H:%M:%S'))
     keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % (
         '\\"{}\\"'.format(slugline)
     )
