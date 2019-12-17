@@ -1,6 +1,6 @@
 # AAP Newsroom Changelog
 
-## [1.17.0-rc1] Not released yet
+## [1.17.0] 2019-12-17
 - [SDAN-612] Sending a UTC date range to search for photos for picture coverages (#60)
 - [SDAN-603] Display timestamp on application logs (#61)
 - [SDAN-613] Provide byline/hyperlink for featuremedia images (#63)
