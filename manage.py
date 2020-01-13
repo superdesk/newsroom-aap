@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 from flask_script import Manager
-from newsroom import Newsroom
+from newsroom.web import NewsroomWebApp
 
-app = Newsroom()
+app = NewsroomWebApp(__name__)
 manager = Manager(app)
 
 if __name__ == "__main__":
