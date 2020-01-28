@@ -1,5 +1,8 @@
 # AAP Newsroom Changelog
 
+## [1.17.1] 2020-01-29
+- Update Newsroom to v1.17.1
+
 ## [1.17.0] 2019-12-17
 - [SDAN-612] Sending a UTC date range to search for photos for picture coverages (#60)
 - [SDAN-603] Display timestamp on application logs (#61)
