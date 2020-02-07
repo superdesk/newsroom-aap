@@ -1,0 +1,27 @@
+<img src= {{ monitoring_image_path + '/login-logo.png' }} width="120"/>
+<h1>{{ monitoring_report_name }} Monitoring: {{ monitoring_profile.name }} {% if current_date %}({{ current_date }}){% endif %}</h1>
+    {% for d in date_items_dict.keys() %}
+        {% if not print %}<h3>{{ d.strftime('%d/%m/%Y') }}</h3>{% endif %}
+        {% for item in date_items_dict[d]  %}
+            <div><span><strong>Headline: {{ item.get('headline', '') }}</strong></span></div>
+            <div><span><strong>Source: {{ item.get('source', '') }}</strong></span></div>
+            <div><span><strong>Keywords: {{ get_keywords_in_text(item.get('body_str', ''), monitoring_profile.keywords)|join(',') }}</strong></span></div>
+            {% if item.byline %}
+                <div><span>By {{ item.get('byline', '') }}</span></div>
+            {% endif %}
+            <div><span>{{ item.get('body_str', '') }}</span></div>
+            {% if monitoring_profile.alert_type == 'linked_text' and not print%}
+                <a style="color: grey" href="{{ url_for_wire(item, True) }}">View Article</a>
+            {% endif %}
+            </br>
+        {% endfor %}
+    {% endfor %}
+
+<div><small>COPYRIGHT & DISCLAIMER: This report and its contents are for the use of AAPNewswire subscribers only and may not be provided to any third party for any purpose whatsoever without the express written permission of Australian Associated Press Pty Ltd. The material contained in this report is for general information purposes only. Any figures in this report are an estimation and should not be taken as definitive statistics. Subscribers should refer to the original article before making any financial decisions or forming any opinions. AAP Newswire Monitoring makes no representations and, to the extent permitted by law, excludes all warranties in relation to the information contained in the report and is not liable to you or to any third party for any losses, costs or expenses, resulting from any use or misuse of the report.
+</br>AAPNewswire report supplied by
+</br>&copy; AAPNewswire {{ current_date[-4:] }}</small></div>
+{% if print %}
+<script>
+    window.print();
+</script>
+{% endif %}
