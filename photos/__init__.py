@@ -34,14 +34,14 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
                                                                                                    .get('slugline'))))
     scheduled = parse_date_str(deliveries[0]['publish_time']) if len(deliveries) > 0 and \
                                                                  (deliveries[0] or {}).get('publish_time') else utcnow()
-    from_date = scheduled - timedelta(hours=8)
+    from_date = scheduled - timedelta(hours=10)
     to_date = scheduled + timedelta(hours=2)
 
+    video_keywords = '{"Keyword":"NZN","Operator":"NOT"}, ' if content_type == 'video' else ''
     date_range_filter = '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"' %(
         from_date.strftime('%Y-%m-%dT%H:%M:%S'), to_date.strftime('%Y-%m-%dT%H:%M:%S'))
-    keyword_filter = '"SearchKeywords":[{"Keyword":"NZN","Operator":"NOT"}, {"Keyword":"%s","Operator":"AND"}]' % (
-        '\\"{}\\"'.format(slugline)
-    )
+    keyword_filter = '"SearchKeywords":[%s{"Keyword":"%s","Operator":"AND"}]' % (video_keywords,
+                                                                                 '\\"{}\\"'.format(slugline))
 
     if content_type == 'video':
         return '{}(credit:"aap video") OR (credit:"pr video")/AAP VIDEO?q={{{}, {}}}'.format(
@@ -49,6 +49,9 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
             keyword_filter, date_range_filter)
     elif content_type == 'video_explainer':
         return '{}?q={{{}, {}}}'.format(app.config.get('EXPLAINERS_WEBSITE_URL'), keyword_filter, date_range_filter)
+    elif content_type == 'graphic':
+        return '{}"supplementalcategory:gra/Static Graphics/?q={{{}, {}}}'.format(
+            app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'), keyword_filter, date_range_filter)
     else:
         return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(
             app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
