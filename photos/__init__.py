@@ -11,6 +11,8 @@ from newsroom.upload import ASSETS_RESOURCE
 from newsroom.media_utils import store_image, get_thumbnail, get_watermark
 from superdesk.utc import utcnow
 from newsroom.utils import parse_date_str
+from PyRTF.document.paragraph import Paragraph
+from PyRTF.Elements import LINE
 
 AAP_PHOTOS_TOKEN = 'AAPPHOTOS_TOKEN'
 logger = logging.getLogger(__name__)
@@ -152,9 +154,18 @@ def generate_preview_details_renditions(picture):
             '_newsroom_custom': custom,
         })
 
+def customize_rtf_file(rtf_document):
+    section = rtf_document.Sections[0]
+    ss = rtf_document.StyleSheet
+    p1 = Paragraph(ss.ParagraphStyles.Normal)
+    footer = '''COPYRIGHT & DISCLAIMER: This report and its contents are for the use of AAPNewswire subscribers only and may not be provided to any third party for any purpose whatsoever without the express written permission of Australian Associated Press Pty Ltd. The material contained in this report is for general information purposes only. Any figures in this report are an estimation and should not be taken as definitive statistics. Subscribers should refer to the original article before making any financial decisions or forming any opinions. AAP Newswire Monitoring makes no representations and, to the extent permitted by law, excludes all warranties in relation to the information contained in the report and is not liable to you or to any third party for any losses, costs or expenses, resulting from any use or misuse of the report.'''
+    p1.append(LINE, footer, LINE, 'AAPNewswire report supplied by', LINE, 'Copyright AAPNewswire {}'.format(utcnow().strftime("%Y")))
+    section.append(p1)
+    return
 
 def init_app(app):
     app.set_photo_coverage_href = set_photo_coverage_href
     app.get_media_cards_external = get_media_cards_external
     app.generate_preview_details_renditions = generate_preview_details_renditions
+    app.customize_rtf_file = customize_rtf_file
     register_products(app)
