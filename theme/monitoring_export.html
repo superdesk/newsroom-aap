@@ -12,15 +12,18 @@
     div {
         font-size: 1.4rem;
     }
+    .line {
+		margin-bottom: 8px;
+	}
 </style>
 <img src= {{ monitoring_image_path + '/login-logo.png' }} width="120"/>
 <h1>{{ monitoring_report_name }} Monitoring: {{ monitoring_profile.name }} {% if current_date %}({{ current_date }}){% endif %}</h1>
     {% for d in date_items_dict.keys() %}
-        {% if not print %}<div id="date"><strong>{{ d.strftime('%d %B %Y') }}</strong></div>{% endif %}
+        {% if not print %}<div id="date" class="line"><strong>{{ d.strftime('%d %B %Y') }}</strong></div>{% endif %}
         {% for item in date_items_dict[d]  %}
             <div><strong>Headline: {{ item.get('headline', '') }}</strong></div>
             <div><strong>Source: {{ item.get('source', '') }}</strong></div>
-            <div><strong>Keywords: {{ get_keywords_in_text(item.get('body_str', ''), monitoring_profile.keywords)|join(',') }}</strong></div>
+            <div class="line"><strong>Keywords: {{ get_keywords_in_text(item.get('body_str', ''), monitoring_profile.keywords)|join(',') }}</strong></div>
             {% if item.byline %}
                 <div>By {{ item.get('byline', '') }}</div>
             {% endif %}
