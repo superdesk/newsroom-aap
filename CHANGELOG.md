@@ -1,5 +1,17 @@
 # AAP Newsroom Changelog
 
+## [1.18.0] 2020-02-20
+- [SDAN-546] Move 'News API' section filter tab to the end (#49)
+- [SDAN-630] Update app base class (#68)
+- [SDAN-633] Customising RTF and PDF monitoring files (#70)
+- [SDAN-640][SDAN-638] Extened date range for media queries, delivery_href for 'graphic' coverages (#71)
+- changed planning branch (#72)
+- [SDAN-633] Logo for Monitoring reports (#73)
+- [SDAN-655] Line breaks in body of a story in Monitoring report (#74)
+- [SDAN-646] Change FactCheck URL to point to new address (#75)
+- [SDAN-648] UI style changes for PDF monitoring report (#76)
+- [SDAN-648] Line spacings for Monitoring PDF Report (#77)
+
 ## [1.17.1] 2020-01-29
 - Update Newsroom to v1.17.1
 
