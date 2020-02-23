@@ -1,5 +1,8 @@
 # AAP Newsroom Changelog
 
+## [1.18.1] 2020-02-24
+- Update Newsroom to v1.18.1
+
 ## [1.18.0] 2020-02-20
 - [SDAN-546] Move 'News API' section filter tab to the end (#49)
 - [SDAN-630] Update app base class (#68)
