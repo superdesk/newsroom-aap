@@ -1,4 +1,10 @@
 newrelic>=3.2,<3.3
+
+# Superdesk-Core v1.29.3 (+ hachoir3 fix)
 git+git://github.com/superdesk/superdesk-core.git@fb0025e#egg=Superdesk-Core
--e git+git://github.com/superdesk/newsroom.git@master#egg=Newsroom
-git+git://github.com/superdesk/superdesk-planning.git@1.10#egg=superdesk-planning
+
+# Newsroom 1.19.0 - https://github.com/superdesk/newsroom/releases/tag/1.19.0
+-e git+git://github.com/superdesk/newsroom.git@efc032e#egg=Newsroom
+
+# Superdesk-Planning 1.10.1 - https://github.com/superdesk/superdesk-planning/releases/tag/1.10.1
+git+git://github.com/superdesk/superdesk-planning.git@6c29726#egg=superdesk-planning
