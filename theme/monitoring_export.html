@@ -29,7 +29,7 @@
             {% endif %}
             {{ item.get('body_str', '') | safe }}
             {% if monitoring_profile.alert_type == 'linked_text' and not print%}
-                <div><a style="color: grey" href="{{ url_for_wire(item, True) }}">View Article</a></div>
+                <div><a style="color: grey" href="{{ url_for('monitoring.index', item=item._id, _external=True) }}">View Article</a></div>
             {% endif %}
             </br>
         {% endfor %}
