@@ -19,14 +19,24 @@
         {% include "sidenav_icon_no_url.html" %}
     {% endfor %}
     <div class="divider"></div>
+    {% set ns = namespace(factcheck_shown=false) %}
     {% for nav in sidenavs_by_group(0, request.blueprint) %}
         {% if nav.get('name') != 'Home' %}
-        {% include "sidenav_icon_no_url.html" %}
+            {% include "sidenav_icon_no_url.html" %}
+        {% endif %}
+        {% if nav.get('name') == 'FactCheck' %}
+            {% set ns.factcheck_shown = true %}
         {% endif %}
     {% endfor %}
     <div class="divider"></div>
     {% for nav in sidenavs_by_group(2, request.blueprint) %}
-        {% include "sidenav_icon_no_url.html" %}
+        {% if nav.get('name') != 'FactCheck' %}
+            {% include "sidenav_icon_no_url.html" %}
+        {% else %}
+            {% if ns.factcheck_shown == false %}
+                {% include "sidenav_icon_no_url.html" %}
+            {% endif %}
+        {% endif %}
     {% endfor %}
 {% endblock %}
 
