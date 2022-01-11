@@ -1,14 +1,30 @@
 <div class="mr-3 d-none d-md-p-block d-lg-l-block">
     <div class="navbar-header_nav_links">
+    {% set ns = namespace(factcheck_shown=false) %}
     {% for group in range(0, 10) %}
         {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
             {% if request.endpoint != nav.endpoint and nav.group != 1 %}
-            <div>
-                <a href="{{ url_for(nav.endpoint) if nav.endpoint else nav.url }}"
-                    {% if nav.url %}target="_blank"{% endif %}
-                >{{  gettext(nav.name) }}
-                </a>
-            </div>
+                {% if nav.get('name') != 'FactCheck' %}
+                    <div>
+                        <a href="{{ url_for(nav.endpoint) if nav.endpoint else nav.url }}"
+                            {% if nav.url %}target="_blank"{% endif %}
+                        >{{  gettext(nav.name) }}
+                        </a>
+                    </div>
+                {% else %}
+                    {% if ns.factcheck_shown == false %}
+                        <div>
+                            <a href="{{ url_for(nav.endpoint) if nav.endpoint else nav.url }}"
+                                {% if nav.url %}target="_blank"{% endif %}
+                            >{{  gettext(nav.name) }}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            {% endif %}
+            {% if nav.get('name') == 'FactCheck' %}
+                {% set ns.factcheck_shown = true %}
             {% endif %}
         {% endfor %}
     {% endfor %}
