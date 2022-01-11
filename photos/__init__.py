@@ -184,6 +184,14 @@ def generate_embed_renditions(item):
                 item['associations']['featuremedia'] = deepcopy(item.get('associations').get(embed_id))
                 generate_renditions(item)
 
+    if 'claim_verdict' in item.get('extra', {}):
+        item['body_html'] = '<p><b>OUR VERDICT</b></p>' + item.get('extra', {}).get(
+            'claim_verdict', '') + item.get('body_html')
+
+    if 'claim_short_text' in item.get('extra', {}):
+        item['body_html'] = '<p><b>WHAT WAS CLAIMED</b></p>' + item.get('extra', {}).get(
+            'claim_short_text', '') + item.get('body_html')
+
 
 def generate_preview_details_renditions(picture, src_rendition='16-9'):
     """Generate preview and details rendition"""
