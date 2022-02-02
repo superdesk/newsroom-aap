@@ -5,6 +5,7 @@
     }
     h1{
 		font-size: 2rem;
+        line-height: 2.2rem;
 	}
     #date{
 		font-size: 1.7rem;
@@ -16,8 +17,8 @@
 		margin-bottom: 8px;
 	}
 </style>
-{% if monitoring_profile.format_type == 'monitoring_email' %}
-    <img src="CID:logo" width="120"/>
+{% if monitoring_profile.format_type == 'monitoring_email' and not print %}
+    <img alt="AAP" src="cid:logo" width="120"/>
 {% else %}
     {% if print %}
         <img src= "/{{ monitoring_image_path + '/login-logo.png' }}" width="120"/>
