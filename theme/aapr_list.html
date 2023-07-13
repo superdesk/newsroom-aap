@@ -1,0 +1,20 @@
+<ul>
+    {% for item in response.docs %}
+        <li>
+            {% if item.extra is defined %}
+                {% if item.extra is defined and item.extra.multimedia is defined and item.extra.multimedia[0] is defined and  item.extra.multimedia[0].thumbnailurl is defined %}
+                    <img src="{{ item.extra.multimedia[0].thumbnailurl }}">
+                {% endif %}
+            {% endif %}
+            <a href="javascript:window.open(window.location.href.split('?')[0] + '?rkey={{ item._id }}', '_self');">{{ item.headline }}</a>
+            <span><p>Published: {{ item.versioncreated | datetime_long }}</p></span>
+            <span>{{ item.description_html | safe }}</span>
+            <span>Source: {{ item.source }}</span>
+            <hr/>
+        </li>
+    {% endfor %}
+    {% if response.first_page %}<a href="javascript:window.open(window.location.href.split('?')[0], '_self')">&lt;&lt;</a>&nbsp;&nbsp;{% endif %}
+    {% if response.prev_page %}<a href="javascript:window.open(window.location.href.split('?')[0] + '?from={{ response.page - 1 }}', '_self')">&lt;</a>&nbsp;&nbsp;{% endif %}
+    {% if response.next_page %}<a href="javascript:window.open(window.location.href.split('?')[0] + '?from={{ response.page + 1 }}', '_self')">&gt;</a>&nbsp;&nbsp;{% endif %}
+    <a href="javascript:window.open(window.location.href.split('?')[0] + '?from={{ response.total_pages }}', '_self')">&gt;&gt;</a>
+</ul>

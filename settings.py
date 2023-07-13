@@ -23,6 +23,7 @@ if 'newsroom.news_api' in CORE_APPS:
 INSTALLED_APPS = [
     'instrumentation',
     'photos',
+    'releases',
     'newsroom.market_place',
     'newsroom.media_releases',
     'newsroom-defaults',
