@@ -154,17 +154,17 @@ def generate_embed_renditions(item):
     # generate required watermarked renditions for any embedded renditions
     for name, association in ((item.get('associations') or {})).items():
         if name.startswith('editor_') and association:
-            generate_preview_details_renditions(item.get('associations', {}).get(name), 'viewImage')
+            generate_preview_details_renditions(item.get('associations', {}).get(name))
             has_editor_assoc = True
 
     if has_editor_assoc:
         # parse out any editor embeds in the item and re-point to the required rendition
-        regex = r' EMBED START Image {id: \"editor_([0-9]+)'
+        regex = r" EMBED START (?:Image|Video|Audio) {id: \"editor_([0-9]+)"
         html_updated = False
         root_elem = lxml_html.fromstring(item.get('body_html', ''))
         comments = root_elem.xpath('//comment()')
         for comment in comments:
-            if 'EMBED START Image' in comment.text:
+            if 'EMBED START ' in comment.text:
                 m = re.search(regex, comment.text)
                 # Assumes the sibling of the Embed Image comment is the figure tag containing the image
                 figure_elem = comment.getnext()
@@ -177,6 +177,16 @@ def generate_embed_renditions(item):
                         if src:
                             imgElem.attrib["src"] = src
                         html_updated = True
+
+                    elem = figure_elem.find("./video") if figure_elem.find("./video") is not None else figure_elem.find(
+                        "./audio")
+                    if elem is not None and m and m.group(1):
+                        src = item.get("associations").get("editor_" + m.group(1)).get("renditions").get(
+                            "original").get("href")
+                        if src:
+                            elem.attrib["src"] = src
+                            html_updated = True
+
         if html_updated:
             item["body_html"] = to_string(root_elem, method="html")
             # If there is no feature media them copy the last embedded image to be the feature media
@@ -196,7 +206,7 @@ def generate_embed_renditions(item):
 def generate_preview_details_renditions(picture, src_rendition='16-9'):
     """Generate preview and details rendition"""
     if not picture or not picture.get('renditions') or not picture.get('renditions').get('16-9'):
-        logger.warning('Invalid renditions. picture: {}'.format(picture))
+        # logger.warning('Invalid renditions. picture: {}'.format(picture))
         return
 
     # add watermark to base/view images
