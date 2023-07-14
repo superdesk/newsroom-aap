@@ -1,5 +1,6 @@
 
 import os
+from superdesk.default_settings import strtobool, env
 from newsroom.default_settings import BLUEPRINTS as blueprints, CORE_APPS, CLIENT_CONFIG
 
 if os.environ.get('PUSH'):
@@ -55,3 +56,6 @@ BACK_STORY_URL = os.environ.get('BACK_STORY_URL', 'https://backstory.aap.com.au/
 ALLOW_PICTURE_DOWNLOAD = False
 
 MONITORING_REPORT_NAME = 'Newswire'
+
+PLYR = True
+EMBED_PRODUCT_FILTERING = strtobool(env('EMBED_PRODUCT_FILTERING', 'true'))
