@@ -1,20 +1,87 @@
 <ul>
     {% for item in response.docs %}
-        <li>
+        <li class="aapr-widget_release">
+            <span class="aapr-widget_thumbnail">
             {% if item.extra is defined %}
                 {% if item.extra is defined and item.extra.multimedia is defined and item.extra.multimedia[0] is defined and  item.extra.multimedia[0].thumbnailurl is defined %}
                     <img src="{{ item.extra.multimedia[0].thumbnailurl }}">
                 {% endif %}
             {% endif %}
-            <a href="javascript:window.open(window.location.href.split('?')[0] + '?rkey={{ item._id }}', '_self');">{{ item.headline }}</a>
-            <span><p>Published: {{ item.versioncreated | datetime_long }}</p></span>
-            <span>{{ item.description_html | safe }}</span>
-            <span>Source: {{ item.source }}</span>
-            <hr/>
+            </span>
+            <span class="aapr-widget_title"><a href="javascript:window.open(window.location.href.split('?')[0] + '?rkey={{ item._id }}', '_self');">{{ item.headline }}</a></span>
+            <span class="aapr-widget_datetime"><p>Published: {{ item.versioncreated | datetime_long }}</p></span>
+            <span class="aapr-widget_abstract">{{ item.description_html | safe }}</span>
+            <span class="spacer">Source: {{ item.source }}</span>
         </li>
     {% endfor %}
+</ul>
+<div class="aapr-widget_footer">
     {% if response.first_page %}<a href="javascript:window.open(window.location.href.split('?')[0], '_self')">&lt;&lt;</a>&nbsp;&nbsp;{% endif %}
     {% if response.prev_page %}<a href="javascript:window.open(window.location.href.split('?')[0] + '?from={{ response.page - 1 }}', '_self')">&lt;</a>&nbsp;&nbsp;{% endif %}
     {% if response.next_page %}<a href="javascript:window.open(window.location.href.split('?')[0] + '?from={{ response.page + 1 }}', '_self')">&gt;</a>&nbsp;&nbsp;{% endif %}
     <a href="javascript:window.open(window.location.href.split('?')[0] + '?from={{ response.total_pages }}', '_self')">&gt;&gt;</a>
-</ul>
+</div>
+
+<style>
+    #aapr-widget {
+        overflow: auto;
+        overflow-x: hidden;
+    }
+
+    #aapr-widget ul, #aapr-widget ul>li, #aapr-widget ul * {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: auto;
+        height: auto;
+        background: none;
+    }
+
+    #aapr-widget .aapr-widget_title, #aapr-widget .aapr-widget_datetime, #aapr-widget .aapr-widget_abstract, #aapr-widget .aapr-widget_release>*:not(.aapr-widget_thumbnail) {
+        display: block;
+        float: left;
+    }
+
+    #aapr-widget .aapr-widget_release .spacer {
+        float: none;
+        clear: both;
+    }
+
+    #aapr-widget .aapr-widget_title, #aapr-widget .aapr-widget_datetime {
+        width: 100%;
+    }
+
+    #aapr-widget .aapr-widget_footer {
+        clear: both;
+    }
+
+    #aapr-widget .aapr-widget_release {
+        padding: 5px;
+        border-bottom: 1px solid #DDDDDD;
+        padding-left: 110px /* give enough room to display the thumbnail */
+    }
+
+    #aapr-widget .aapr-widget_thumbnail {
+        display: block;
+        position: relative;
+        width: 100px; /* set width for left column */
+        float: left; /* both columns have to float */
+        padding-right: 10px; /* add a small gap from the adjacent text */
+        margin-left: -110px; /* negative margin equal to width of margin of containing li */
+    }
+
+    #aapr-widget .aapr-widget_thumbnail img {
+        width: 100px;
+        max-height: 100px;
+    }
+
+    #aapr-widget .aapr-widget_datetime { color: #888888; }
+    #aapr-widget .aapr-widget_datetime { font-style: italic; }
+    #aapr-widget .aapr-widget_datetime { font-weight: normal; }
+    #aapr-widget .aapr-widget_footer a { font-style: normal; }
+    #aapr-widget .aapr-widget_footer a { font-weight: normal; }
+    #aapr-widget .aapr-widget_release { border-bottom-style: solid; }
+    #aapr-widget .aapr-widget_release { border-bottom-width: 1px; }
+    #aapr-widget .aapr-widget_title { font-style: normal; }
+    #aapr-widget .aapr-widget_title { font-weight: normal; }
+</style>
