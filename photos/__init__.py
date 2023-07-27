@@ -24,16 +24,14 @@ logger = logging.getLogger(__name__)
 
 
 def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
-    plan_coverage = next(
-        (c for c in (planning_item or {}).get('coverages') or [] if c.get('coverage_id') == coverage.get('coverage_id'))
-        ,coverage
-    )
+    plan_coverage = next((c for c in (planning_item or {}).get('coverages') or [] if
+                          c.get('coverage_id') == coverage.get('coverage_id')), coverage)
     content_type = plan_coverage.get('coverage_type') or (plan_coverage.get('planning') or {}).get('g2_content_type')
-    if not plan_coverage or plan_coverage['workflow_status'] != 'completed' or \
-                (content_type in ['picture', 'video', ] and \
-            not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL')) or \
-                (content_type == 'video_explainer' and \
-            not app.config.get('EXPLAINERS_WEBSITE_URL')):
+    if content_type != 'picture':
+        return
+    if not plan_coverage or plan_coverage['workflow_status'] != 'completed':
+        return
+    if content_type in ['picture'] and not app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'):
         return
 
     slugline = parse.quote(plan_coverage.get('slugline') or (plan_coverage.get('planning', {}).get('slugline',
@@ -44,23 +42,10 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
     from_date = scheduled - timedelta(hours=10)
     to_date = scheduled + timedelta(hours=2)
 
-    video_keywords = '{"Keyword":"NZN","Operator":"NOT"}, ' if content_type == 'video' else ''
     date_range_filter = '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"' %(
         from_date.strftime('%Y-%m-%dT%H:%M:%S'), to_date.strftime('%Y-%m-%dT%H:%M:%S'))
-    keyword_filter = '"SearchKeywords":[%s{"Keyword":"%s","Operator":"AND"}]' % (video_keywords,
-                                                                                 '\\"{}\\"'.format(slugline))
 
-    if content_type == 'video':
-        return '{}(credit:"aap video") OR (credit:"pr video")/AAP VIDEO?q={{{}, {}}}'.format(
-            app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
-            keyword_filter, date_range_filter)
-    elif content_type == 'video_explainer':
-        return '{}?q={{{}, {}}}'.format(app.config.get('EXPLAINERS_WEBSITE_URL'), keyword_filter, date_range_filter)
-    elif content_type == 'graphic':
-        return '{}"supplementalcategory:gra/Static Graphics/?q={{{}, {}}}'.format(
-            app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'), keyword_filter, date_range_filter)
-    else:
-        return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(
+    return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(
             app.config.get('MULTIMEDIA_WEBSITE_SEARCH_URL'),
             slugline, date_range_filter
         )
@@ -161,6 +146,7 @@ def generate_embed_renditions(item):
         # parse out any editor embeds in the item and re-point to the required rendition
         regex = r" EMBED START (?:Image|Video|Audio) {id: \"editor_([0-9]+)"
         html_updated = False
+        embed_id = None
         root_elem = lxml_html.fromstring(item.get('body_html', ''))
         comments = root_elem.xpath('//comment()')
         for comment in comments:
@@ -190,8 +176,8 @@ def generate_embed_renditions(item):
         if html_updated:
             item["body_html"] = to_string(root_elem, method="html")
             # If there is no feature media them copy the last embedded image to be the feature media
-            if not ((item.get('associations') or {}).get('featuremedia') or {}).get('renditions'):
-                item['associations']['featuremedia'] = deepcopy(item.get('associations').get(embed_id))
+            if not ((item.get('associations') or {}).get('featuremedia') or {}).get('renditions') and embed_id:
+                item['associations']['featuremedia'] = deepcopy((item.get('associations') or {}).get(embed_id, {}))
                 generate_renditions(item)
 
     if 'claim_verdict' in item.get('extra', {}):
@@ -220,6 +206,7 @@ def generate_preview_details_renditions(picture, src_rendition='16-9'):
             '_newsroom_custom': custom,
         })
 
+
 def customize_rtf_file(rtf_document):
     section = rtf_document.Sections[0]
     ss = rtf_document.StyleSheet
@@ -228,6 +215,7 @@ def customize_rtf_file(rtf_document):
     p1.append(LINE, footer, LINE, 'AAPNewswire report supplied by', LINE, 'Copyright AAPNewswire {}'.format(utcnow().strftime("%Y")))
     section.append(p1)
     return
+
 
 def init_app(app):
     app.set_photo_coverage_href = set_photo_coverage_href
