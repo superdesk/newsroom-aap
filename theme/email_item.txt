@@ -1,5 +1,3 @@
-From {{url_for('wire.index')}}
-
 {{ item.headline }}
 
 {% if item.body_txt %}{{ item.body_txt }}{% elif item.body_html %}{{ item.body_html | plain_text }}{% endif %}
