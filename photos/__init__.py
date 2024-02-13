@@ -38,11 +38,11 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
                                                                                                    (planning_item or {})
                                                                                                    .get('slugline'))))
     scheduled = parse_date_str(deliveries[0]['publish_time']) if len(deliveries) > 0 and \
-                                                                 (deliveries[0] or {}).get('publish_time') else utcnow()
+        (deliveries[0] or {}).get('publish_time') else utcnow()
     from_date = scheduled - timedelta(hours=10)
     to_date = scheduled + timedelta(hours=2)
 
-    date_range_filter = '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"' %(
+    date_range_filter = '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"' % (
         from_date.strftime('%Y-%m-%dT%H:%M:%S'), to_date.strftime('%Y-%m-%dT%H:%M:%S'))
 
     return '{}"{}"?q={{"MediaTypes":["image"],{}}}'.format(
@@ -172,6 +172,11 @@ def generate_embed_renditions(item):
                         if src:
                             elem.attrib["src"] = src
                             html_updated = True
+                    caption_elem = figure_elem.find("./figcaption")
+                    # Append the attribution to the caption
+                    if caption_elem is not None and m and m.group(1):
+                        caption_elem.text = caption_elem.text + " (" + item.get("associations", {}).get(
+                            "editor_" + m.group(1), {}).get("byline", "") + ")"
 
         if html_updated:
             item["body_html"] = to_string(root_elem, method="html")
@@ -211,8 +216,16 @@ def customize_rtf_file(rtf_document):
     section = rtf_document.Sections[0]
     ss = rtf_document.StyleSheet
     p1 = Paragraph(ss.ParagraphStyles.Normal)
-    footer = '''COPYRIGHT & DISCLAIMER: This report and its contents are for the use of AAPNewswire subscribers only and may not be provided to any third party for any purpose whatsoever without the express written permission of Australian Associated Press Pty Ltd. The material contained in this report is for general information purposes only. Any figures in this report are an estimation and should not be taken as definitive statistics. Subscribers should refer to the original article before making any financial decisions or forming any opinions. AAP Newswire Monitoring makes no representations and, to the extent permitted by law, excludes all warranties in relation to the information contained in the report and is not liable to you or to any third party for any losses, costs or expenses, resulting from any use or misuse of the report.'''
-    p1.append(LINE, footer, LINE, 'AAPNewswire report supplied by', LINE, 'Copyright AAPNewswire {}'.format(utcnow().strftime("%Y")))
+    footer = '''COPYRIGHT & DISCLAIMER: This report and its contents are for the use of AAPNewswire subscribers only
+    and may not be provided to any third party for any purpose whatsoever without the express written permission of
+    Australian Associated Press Pty Ltd. The material contained in this report is for general information purposes
+    only. Any figures in this report are an estimation and should not be taken as definitive statistics. Subscribers
+    should refer to the original article before making any financial decisions or forming any opinions.
+    AAP Newswire Monitoring makes no representations and, to the extent permitted by law, excludes all warranties in
+    relation to the information contained in the report and is not liable to you or to any third party for any losses,
+    costs or expenses, resulting from any use or misuse of the report.'''
+    p1.append(LINE, footer, LINE, 'AAPNewswire report supplied by', LINE,
+              'Copyright AAPNewswire {}'.format(utcnow().strftime("%Y")))
     section.append(p1)
     return
 
