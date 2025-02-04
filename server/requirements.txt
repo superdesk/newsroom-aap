@@ -35,11 +35,11 @@ async-timeout==5.0.1
     # via
     #   aiohttp
     #   redis
-attrs==24.3.0
+attrs==25.1.0
     # via aiohttp
-authlib==1.4.0
+authlib==1.4.1
     # via superdesk-core
-babel==2.16.0
+babel==2.17.0
     # via quart-babel
 bcrypt==4.2.1
     # via superdesk-core
@@ -53,9 +53,9 @@ blinker==1.9.0
     #   quart
     #   sentry-sdk
     #   superdesk-core
-boto3==1.36.4
+boto3==1.36.12
     # via superdesk-core
-botocore==1.36.4
+botocore==1.36.12
     # via
     #   boto3
     #   s3transfer
@@ -71,7 +71,7 @@ cerberus==1.3.7
     # via
     #   eve
     #   superdesk-core
-certifi==2024.12.14
+certifi==2025.1.31
     # via
     #   elastic-apm
     #   elasticsearch
@@ -167,7 +167,7 @@ h11==0.14.0
     # via
     #   hypercorn
     #   wsproto
-h2==4.1.0
+h2==4.2.0
     # via hypercorn
 hachoir==3.3.0
     # via superdesk-core
@@ -236,7 +236,7 @@ markupsafe==3.0.2
     #   superdesk-core
     #   werkzeug
     #   wtforms
-motor==3.6.1
+motor==3.7.0
     # via superdesk-core
 multidict==6.1.0
     # via
@@ -248,7 +248,7 @@ oauth2client==4.1.3
     # via flask-oidc-ex
 oauthlib==3.2.2
     # via requests-oauthlib
-orderly-set==5.2.3
+orderly-set==5.3.0
     # via deepdiff
 oscrypto==1.3.0
     # via pyhanko-certvalidator
@@ -277,7 +277,7 @@ pyasn1-modules==0.4.1
     #   oauth2client
 pycparser==2.22
     # via cffi
-pydantic==2.10.5
+pydantic==2.10.6
     # via superdesk-core
 pydantic-core==2.27.2
     # via pydantic
@@ -300,7 +300,7 @@ pyparsing==3.2.1
     # via
     #   httplib2
     #   pyrtf3
-pypdf==5.1.0
+pypdf==5.2.0
     # via xhtml2pdf
 pyrtf3==0.47.5
     # via newsroom-core
@@ -324,7 +324,7 @@ python-twitter==3.5
     # via superdesk-core
 python3-saml==1.16.0
     # via newsroom-core
-pytz==2024.2
+pytz==2025.1
     # via
     #   croniter
     #   eve-elastic
@@ -363,7 +363,7 @@ redis==5.2.1
     #   superdesk-core
 regex==2024.11.6
     # via superdesk-core
-reportlab==4.2.5
+reportlab==4.3.0
     # via
     #   superdesk-core
     #   svglib
@@ -381,7 +381,7 @@ rsa==4.9
     # via
     #   google-auth
     #   oauth2client
-s3transfer==0.11.1
+s3transfer==0.11.2
     # via boto3
 sentry-sdk[quart]==1.45.1
     # via
@@ -416,7 +416,7 @@ types-aiofiles==24.1.0.20241221
     # via quart-uploads
 types-python-dateutil==2.9.0.20241206
     # via arrow
-types-pytz==2024.2.0.20241221
+types-pytz==2025.1.0.20250204
     # via quart-babel
 typing-extensions==4.12.2
     # via
