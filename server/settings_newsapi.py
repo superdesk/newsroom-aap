@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from superdesk.default_settings import env, strtobool # noqa
@@ -10,3 +11,5 @@ ABS_PATH = Path(__file__).resolve().parent
 CORE_APPS.extend([])
 INSTALLED_APPS.extend([])
 BLUEPRINTS.extend([])
+
+NEWS_API_ENABLED = strtobool(os.environ.get('NEWS_API_ENABLED', 'false'))
