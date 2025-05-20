@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+    {% block topnav %}
+        <nav class="main navbar">
+            <h3 class="a11y-only">{{ gettext('Main Navigation Bar') }}</h3>
+            {% block logo %}
+            {% include 'logo.html' %}
+            {% endblock %}
+
+            <div class="navbar-brand">
+                <nav>
+                    {% block breadcrumb %}{% endblock %}
+                </nav>
+            </div>
+
+            {% include "impersonate_user.html" %}
+
+            {% block topnav_navbar %}
+            {% if session.get('name') %}
+            <div class="navbar__right">
+                {% if config.SHOW_DATE %}
+                <div class="navbar__date">{{ get_date() | date_header }}</div>
+                {% endif %}
+                <div class="navbar-notifications" id="header-notification"></div>
+                <div id="header-profile-toggle" data-test-id="header-avatar"></div>
+            </div>
+            {% else %}
+            <div class="navbar__right navbar__right--login">
+                <div class="navbar__date">{{ get_date() | date_header }}</div>
+                <a class="nav-link" href="{{ url_for('auth.login') }}">{{ gettext('Login') }}</a>
+                {% if config.CONTACT_ADDRESS %}
+                <a class="nav-link"
+                   href="{{ config.CONTACT_ADDRESS }}"
+                   target="_blank">{{ gettext('Contact Us') }}</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endblock %}
+        </nav>
+        {% set ns = namespace(currentNav=None) %}
+        {% for group in range(0, 10) %}
+            {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
+                {% if request.endpoint == nav.endpoint or request.endpoint in nav.secondary_endpoints %}
+                    {% set ns.currentNav = nav %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        {% if ns.currentNav %}
+        <nav class="main navbar navbar-header_1 navbar-header_1--small">
+            {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') not in ['aapX', 'AM'] else ns.currentNav.name }}
+        </nav>
+        {% endif %}
+        {% include 'header_nav_links.html' %}
+    {% endblock %}

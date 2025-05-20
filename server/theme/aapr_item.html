@@ -1,0 +1,5 @@
+<input type="button" value="Back" onclick="javascript:window.history.back()">
+<h1>{{ item.headline }}</h1>
+<p>Published: {{ item.versioncreated | datetime_long }}</p>
+<hr/>
+{{ item.body_html | safe }}

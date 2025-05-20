@@ -1,0 +1,174 @@
+[
+{
+    "_id" : "aapX",
+    "preview" : {
+        "slugline" : {
+            "displayed" : false
+        },
+        "urgency" : {
+            "displayed" : false
+        },
+        "genre" : {
+            "displayed" : false
+        },
+        "item_versions" : {
+            "displayed" : false
+        },
+        "byline" : {
+            "displayed" : false
+        },
+        "located" : {
+            "displayed" : false
+        },
+        "tags_section" : {
+            "displayed" : false
+        },
+        "charcount" : {
+            "displayed" : false
+        }
+    },
+    "details" : {
+        "slugline" : {
+            "displayed" : false
+        },
+        "urgency" : {
+            "displayed" : false
+        },
+        "genre" : {
+            "displayed" : false
+        },
+        "item_versions" : {
+            "displayed" : false
+        },
+        "tags_section" : {
+            "displayed" : false
+        },
+        "charcount" : {
+            "displayed" : false
+        }
+    },
+    "advanced_search_tabs" : {
+        "topics" : false,
+        "nav" : true,
+        "filters" : true
+    },
+    "multi_select_topics" : false
+},
+{
+    "_id" : "wire",
+    "preview" : {
+        "charcount" : {
+            "displayed" : false
+        },
+        "agenda_links" : {
+            "displayed" : true
+        },
+        "media" : {
+            "displayed" : false
+        }
+    },
+    "details" : {
+        "charcount" : {
+            "displayed" : false
+        },
+        "agenda_links" : {
+            "displayed" : true
+        },
+        "media" : {
+            "displayed" : false
+        }
+    },
+    "multi_select_topics" : true
+},
+{
+    "_id" : "media_releases",
+    "preview" : {
+        "urgency" : {
+            "displayed" : false
+        },
+        "genre" : {
+            "displayed" : false
+        },
+        "item_versions" : {
+            "displayed" : false
+        },
+        "byline" : {
+            "displayed" : false
+        },
+        "located" : {
+            "displayed" : false
+        },
+        "tags_section" : {
+            "displayed" : false
+        },
+        "follow_story" : {
+            "displayed" : false
+        },
+        "charcount" : {
+            "displayed" : false
+        }
+    },
+    "details" : {
+        "follow_story" : {
+            "displayed" : false
+        },
+        "urgency" : {
+            "displayed" : false
+        },
+        "genre" : {
+            "displayed" : false
+        },
+        "item_versions" : {
+            "displayed" : false
+        },
+        "tags_section" : {
+            "displayed" : false
+        },
+        "charcount" : {
+            "displayed" : false
+        }
+    },
+    "advanced_search_tabs" : {
+        "topics" : false,
+        "nav" : false,
+        "filters" : true
+    },
+    "multi_select_topics" : false
+},
+{
+    "_id" : "agenda",
+    "multi_select_topics" : true
+},
+{
+    "_id" : "monitoring",
+    "advanced_search_tabs" : {
+        "filters" : true,
+        "nav" : true,
+        "topics" : false
+    },
+    "details" : {
+        "media" : {
+            "displayed" : false
+        }
+    },
+    "multi_select_topics" : false,
+    "preview" : {
+        "media" : {
+            "displayed" : false
+        }
+    }
+},
+{
+    "_id" : "factcheck",
+    "details" : {
+        "media" : {
+            "displayed" : false
+        }
+    },
+    "preview" : {
+        "media" : {
+            "displayed" : false
+        }
+    }
+}
+]
