@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ gettext('Releases') }}{% endblock %}
+
+
+{% block content %}
+    <div class="content-main">
+        <div class="wire-column__main">
+            <div class="wire-articles wire-articles--list" style="padding-left: 16px">
+                <script>
+                    var _aapr = document.createElement('script');
+                    _aapr.src = "{{ url_for('theme', filename = 'aaprwidget.js') }}";
+                    _aapr.type = 'text/javascript';
+                    _aapr.async = true;
+                    document.head.appendChild(_aapr);
+                </script>
+                <div id="aapr-widget"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

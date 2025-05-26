@@ -1,0 +1,68 @@
+{% extends "layout_wire.html" %}
+
+{% block contentMain %}
+    <div id="login-container" class="nh-login-page__content {% block custom_container_style %}{% endblock %}">
+
+        <div class="login-box">
+
+            <div class="login-box__header">
+                {% block login_logo %}
+                    <div class="d-flex align-items-center justify-content-center">
+                       <img src="{{ theme_url('login-logo.svg') }}" style="width: 35%;"/>
+                    </div>
+                {% endblock %}
+                <h3 class="login-box__title">
+                    {% block login_title %}
+                        {{ gettext("Login to AAP Newsroom") }}
+                    {% endblock %}
+                </h3>
+            </div>
+            <div class="">
+                {% include "login_messages.html" %}
+
+                {% block login_form %}
+                    <form class="form" role="form" id="formLogin" method="post">
+                        {{ form.csrf_token }}
+
+                        <div style="display:none">
+                            {{ form.firebase_status(type="hidden", id="firebase-status") }}
+                        </div>
+
+                        {% include "form_alerts.html" %}
+
+                        <div class="form-group">
+                            <label for="email">{{ form.email.label.text }}</label>
+                            {{ form.email(class="form-control", id="email", required="true", autocomplete="username") }}
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="password">{{ form.password.label.text }}</label>
+                            {{ form.password(class="form-control", id="password", required="true", autocomplete="current-password") }}
+                        </div>
+
+                        <div class="d-flex align-items-center mb-3 justify-content-between flex-wrap gap-1">
+                            <div class="form-check">
+                                {{ form.remember_me(class="form-check-input", id="remember_me") }}
+                                <label class="form-check-label"
+                                       for="remember_me">{{ form.remember_me.label.text }}</label>
+                            </div>
+                            <span class="d-flex gap-1 text-md">
+                        {% block reset_password %}
+                            <span>{{ gettext('Forgot your password?') }}</span>
+                            <a class="link" href="{{ url_for('auth.token', token_type='reset_password') }}"
+                               title="{{ gettext('Reset password') }}">{{ gettext('Click here to reset') }}</a>
+                        {% endblock %}
+                    </span>
+                        </div>
+
+                        <button type="submit" class="nh-button nh-button--primary w-100">{{ gettext("Login") }}</button>
+
+                    </form>
+                {% endblock %}
+            </div>
+        </div>
+
+        {% block login_page_footer %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
