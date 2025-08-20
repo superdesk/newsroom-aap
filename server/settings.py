@@ -93,6 +93,9 @@ INSTALLED_APPS = [
     "newsroom.factcheck",
     "newsroom.media_releases",
     "newsroom.news_api",
+    "aap.formatters",
 ]
 
 NEWS_API_ENABLED = strtobool(os.environ.get("NEWS_API_ENABLED", "false"))
+
+WIRE_TIME_FILTERS = []

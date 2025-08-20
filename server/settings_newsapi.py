@@ -9,7 +9,7 @@ ABS_PATH = Path(__file__).resolve().parent
 
 # extend apps
 CORE_APPS.extend([])
-INSTALLED_APPS.extend([])
+INSTALLED_APPS.extend(['aap.formatters'])
 BLUEPRINTS.extend([])
 
 NEWS_API_ENABLED = strtobool(os.environ.get('NEWS_API_ENABLED', 'false'))
