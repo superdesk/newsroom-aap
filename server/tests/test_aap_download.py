@@ -1,78 +1,20 @@
 import bson
-from datetime import datetime, timedelta
-#from tests.core.test_push import upload_binary
-from tests.core.utils import update_entries_for
+from datetime import timedelta
 
-from tests.core.test_download import filename
+from zipfile import ZipFile
+import lxml.html as lxml_html
 
-items = [
-    {
-        "_id": "tag:foo",
-        "type": "text",
-        "version": 2,
-        "headline": "Amazon Is Opening More Bookstores",
-        "slugline": "AMAZON-BOOKSTORE-OPENING",
-        "body_html": "<p>New stores will open in DC and Austin in 2018.</p><p>Next line</p>",
-        "firstcreated": "2017-11-27T08:00:57+0000",
-        "versioncreated": datetime.now(),
-        "service": [{"code": "a", "name": "Service A"}],
-        "products": [{"code": "1", "name": "product-1"}, {"code": "3", "name": "product-3"}],
-    },
-    {
-        "_id": "urn:localhost:weather",
-        "type": "text",
-        "version": 1,
-        "headline": "Weather",
-        "slugline": "WEATHER",
-        "body_html": "<p>Weather report</p>",
-        "ancestors": ["tag:weather", "tag:weather:old"],
-        "firstcreated": datetime.now() - timedelta(days=5),
-        "versioncreated": datetime.now().replace(hour=23, minute=55, second=10) - timedelta(days=5),
-        "service": [{"code": "b", "name": "Service B"}],
-        "products": [{"code": "2", "name": "product-2"}],
-    },
-    {
-        "_id": "urn:localhost:flood",
-        "type": "text",
-        "version": 1,
-        "headline": "Flood Waters",
-        "slugline": "Disaster",
-        "body_html": "<p>Water levels keep rising</p>",
-        "firstcreated": datetime.now() - timedelta(days=5),
-        "versioncreated": datetime.now().replace(hour=23, minute=55, second=20) - timedelta(days=5),
-        "service": [{"code": "c", "name": "Service C"}],
-        "products": [{"code": "7", "name": "product-7"}],
-    },
-    {
-        "_id": "tag:weather",
-        "type": "text",
-        "version": 2,
-        "nextversion": "urn:localhost:weather",
-        "versioncreated": datetime.now() - timedelta(days=8),
-        "source": "AAP",
-    },
-    {
-        "_id": "tag:weather:old",
-        "type": "text",
-        "version": 2,
-        "nextversion": "tag:weather",
-        "versioncreated": datetime.now() - timedelta(days=10),
-        "service": [{"code": "c", "name": "Service C"}],
-    },
-    {
-        "_id": "tag:out-of-default-range",
-        "type": "text",
-        "version": 1,
-        "versioncreated": datetime.now() - timedelta(days=365),
-        "service": [{"code": "c", "name": "Service C"}],
-    },
-]
+from superdesk.core import json
+from superdesk.utc import utcnow
+
+from newsroom.tests import test_utils
+from newsroom.tests.fixtures import user, auth_users, items, init_items, init_auth  # noqa
 
 items_ids = [item["_id"] for item in items[:2]]
 item = items[:2][0]
 
 
-async def setup_embeds(client, app):
+async def setup_embeds():
     media_id = str(bson.ObjectId())
     associations = {
         "featuremedia": {
@@ -106,7 +48,10 @@ async def setup_embeds(client, app):
                 }
             },
             "mimetype": "video/mp4",
-            "products": [{"code": "123", "name": "Product A"}, {"code": "321", "name": "Product B"}],
+            "products": [
+                {"code": "123", "name": "Product A"},
+                {"code": "321", "name": "Product B"},
+            ],
         },
         "editor_0": {
             "type": "audio",
@@ -143,7 +88,7 @@ async def setup_embeds(client, app):
         },
         "editor_3": None,
     }
-    await update_entries_for(
+    await test_utils.update_entries_for(
         "items",
         item["_id"],
         {
@@ -179,6 +124,7 @@ async def setup_embeds(client, app):
         item,
     )
 
+
 def ninjs_content_test(content):
     data = json.loads(content.decode("utf-8"))
     assert data.get("associations").get("editor_1")
@@ -190,7 +136,7 @@ def ninjs_content_test(content):
 
 
 def html_content_test(content):
-    root = lxml.html.fromstring(content)
+    root = lxml_html.fromstring(content)
     assert root.tag == "html"
 
 
@@ -198,22 +144,22 @@ wire_formats = [
     {
         "format": "html",
         "mimetype": "text/html",
-        "filename": filename("amazon-bookstore-opening.html", item),
+        "filename": test_utils.get_download_filename("amazon-bookstore-opening.html", item),
         "test_content": html_content_test,
     },
     {
         "format": "html_media",
         "mimetype": "text/html",
-        "filename": filename("amazon-bookstore-opening.html", item),
+        "filename": test_utils.get_download_filename("amazon-bookstore-opening.html", item),
         "test_content": html_content_test,
     },
 ]
 
 
 async def test_ninjs_download(client, app):
-    await setup_embeds(client, app)
+    await setup_embeds()
     app.config["EMBED_PRODUCT_FILTERING"] = True
-    await create_entries_for(
+    await test_utils.create_entries_for(
         "companies",
         [
             {
@@ -223,10 +169,12 @@ async def test_ninjs_download(client, app):
             }
         ],
     )
-    user = await find_one_for("users", req=None, first_name="admin")
+    user = await test_utils.find_one_for("users", req=None, first_name="admin")
     assert user
-    await update_entries_for("users", user["_id"], {"company": "111111111111111111111111"}, user)
-    await create_entries_for(
+    await test_utils.update_entries_for(
+        "users", user["_id"], {"company": "111111111111111111111111"}, user
+    )
+    await test_utils.create_entries_for(
         "products",
         [
             {
@@ -241,12 +189,12 @@ async def test_ninjs_download(client, app):
     )
     app.general_setting("news_api_allowed_renditions", "Foo", default="16-9,4-3")
 
-    _file = await download_zip_file(client, "ninjspackage", "wire")
-    with zipfile.ZipFile(_file) as zf:
-        assert filename("amazon-bookstore-opening.json", item) in zf.namelist()
-        content = zf.open(filename("amazon-bookstore-opening.json", item)).read()
+    _file = await test_utils.download_zip_file(client, items_ids, "ninjspackage", "wire")
+    with ZipFile(_file) as zf:
+        assert test_utils.get_download_filename("amazon-bookstore-opening.json", item) in zf.namelist()
+        content = zf.open(test_utils.get_download_filename("amazon-bookstore-opening.json", item)).read()
     ninjs_content_test(content)
-    history = await get_all("history")
+    history = await test_utils.get_all("history")
     assert 4 == len(history)
     assert "download" in history[0]["action"]
     assert "download" in history[1]["action"]
@@ -259,9 +207,9 @@ async def test_ninjs_download(client, app):
 
 
 async def test_html_package_downloads(client, app):
-    await setup_embeds(client, app)
+    await setup_embeds()
     app.config["EMBED_PRODUCT_FILTERING"] = True
-    await create_entries_for(
+    await test_utils.create_entries_for(
         "companies",
         [
             {
@@ -271,10 +219,12 @@ async def test_html_package_downloads(client, app):
             }
         ],
     )
-    user = await find_one_for("users", req=None, first_name="admin")
+    user = await test_utils.find_one_for("users", req=None, first_name="admin")
     assert user
-    await update_entries_for("users", user["_id"], {"company": "111111111111111111111111"}, user)
-    await create_entries_for(
+    await test_utils.update_entries_for(
+        "users", user["_id"], {"company": "111111111111111111111111"}, user
+    )
+    await test_utils.create_entries_for(
         "products",
         [
             {
@@ -289,12 +239,12 @@ async def test_html_package_downloads(client, app):
     )
     app.general_setting("news_api_allowed_renditions", "Foo", default="16-9,4-3")
 
-    _file = await download_zip_file(client, "html_package", "wire")
-    with zipfile.ZipFile(_file) as zf:
-        assert filename("amazon-bookstore-opening.html", item) in zf.namelist()
-        content = zf.open(filename("amazon-bookstore-opening.html", item)).read()
+    _file = await test_utils.download_zip_file(client, items_ids, "html_package", "wire")
+    with ZipFile(_file) as zf:
+        assert test_utils.get_download_filename("amazon-bookstore-opening.html", item) in zf.namelist()
+        content = zf.open(test_utils.get_download_filename("amazon-bookstore-opening.html", item)).read()
     html_content_test(content)
-    history = await get_all("history")
+    history = await test_utils.get_all("history")
     assert 4 == len(history)
     assert "download" in history[0]["action"]
     assert "download" in history[1]["action"]
