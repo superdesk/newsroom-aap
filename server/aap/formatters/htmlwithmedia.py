@@ -4,7 +4,10 @@ from newsroom.types import Any
 from quart_babel import lazy_gettext
 from superdesk.flask import render_template
 from newsroom.formatters import BaseFormatter, FormatterAssetType
-from newsroom.wire.formatters.utils import log_media_downloads, remove_unpermissioned_embeds
+from newsroom.wire.formatters.utils import (
+    log_media_downloads,
+    remove_unpermissioned_embeds,
+)
 from newsroom.news_api.utils import (
     remove_internal_renditions,
 )
@@ -38,12 +41,24 @@ class HTMLMediaFormatter(BaseFormatter):
         src_rendition = ""
         renditions = item.get("associations", {}).get(embed_id).get("renditions", [])
         for rendition in renditions:
-            width = item.get("associations", {}).get(embed_id).get("renditions", {}).get(rendition).get("width", -2)
+            width = (
+                item.get("associations", {})
+                .get(embed_id)
+                .get("renditions", {})
+                .get(rendition)
+                .get("width", -2)
+            )
             if width > widest:
                 widest = width
                 src_rendition = rendition
 
-        src = item.get("associations", {}).get(embed_id, {}).get("renditions", {}).get(src_rendition).get("media", "")
+        src = (
+            item.get("associations", {})
+            .get(embed_id, {})
+            .get("renditions", {})
+            .get(src_rendition)
+            .get("media", "")
+        )
         mimetype = (
             item.get("associations", {})
             .get(embed_id, {})
@@ -52,17 +67,31 @@ class HTMLMediaFormatter(BaseFormatter):
             .get("mimetype", "")
         )
         file = flask.current_app.media.get(src, ASSETS_RESOURCE)
-        b64 = "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
+        b64 = (
+            "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
+        )
         return b64
 
     @staticmethod
     def get_base64href(embed_id: str, item: dict[str, Any]) -> str:
-        src = item.get("associations", {}).get(embed_id, {}).get("renditions", {}).get("original", {}).get("media", "")
+        src = (
+            item.get("associations", {})
+            .get(embed_id, {})
+            .get("renditions", {})
+            .get("original", {})
+            .get("media", "")
+        )
         mimetype = (
-            item.get("associations", {}).get(embed_id, {}).get("renditions", {}).get("original", {}).get("mimetype", "")
+            item.get("associations", {})
+            .get(embed_id, {})
+            .get("renditions", {})
+            .get("original", {})
+            .get("mimetype", "")
         )
         file = flask.current_app.media.get(src, ASSETS_RESOURCE)
-        b64 = "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
+        b64 = (
+            "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
+        )
         return b64
 
     def rewire_embedded_images(self, item: dict[str, Any]) -> None:
@@ -74,7 +103,9 @@ class HTMLMediaFormatter(BaseFormatter):
                 elem.attrib["src"] = src
             return True
 
-        def update_video_or_audio(item: dict[str, Any], elem: HtmlElement, group: str) -> bool:
+        def update_video_or_audio(
+            item: dict[str, Any], elem: HtmlElement, group: str
+        ) -> bool:
             embed_id: str = "editor_" + group
             elem.attrib["id"] = embed_id
             src = self.get_base64href(embed_id, item)
@@ -85,7 +116,9 @@ class HTMLMediaFormatter(BaseFormatter):
             elem.attrib.pop("height", None)
             return True
 
-        update_embeds_in_body(item, update_image, update_video_or_audio, update_video_or_audio)
+        update_embeds_in_body(
+            item, update_image, update_video_or_audio, update_video_or_audio
+        )
 
     @staticmethod
     def rewire_featuremedia(item: dict[str, Any]) -> None:
@@ -94,7 +127,9 @@ class HTMLMediaFormatter(BaseFormatter):
         :param item:
         :return:
         """
-        renditions = item.get("associations", {}).get("featuremedia", {}).get("renditions", [])
+        renditions = (
+            item.get("associations", {}).get("featuremedia", {}).get("renditions", [])
+        )
         for rendition in renditions:
             src: str = (
                 item.get("associations", {})
@@ -112,16 +147,23 @@ class HTMLMediaFormatter(BaseFormatter):
             )
             file = flask.current_app.media.get(src, ASSETS_RESOURCE)
             if file and mimetype:
-                item["associations"]["featuremedia"]["renditions"][rendition]["href"] = (
-                    "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
+                item["associations"]["featuremedia"]["renditions"][rendition][
+                    "href"
+                ] = (
+                    "data:{};base64,".format(mimetype)
+                    + base64.b64encode(file.read()).decode()
                 )
 
-    async def format_item(self, item: dict[str, Any], item_type: str | None = "items") -> bytes:
+    async def format_item(
+        self, item: dict[str, Any], item_type: str | None = "items"
+    ) -> bytes:
         await remove_unpermissioned_embeds(item)
         remove_internal_renditions(item)
         self.rewire_embedded_images(item)
         self.rewire_featuremedia(item)
-        resp = str.encode(await render_template("download_embed.html", item=item), "utf-8")
+        resp = str.encode(
+            await render_template("download_embed.html", item=item), "utf-8"
+        )
         # log media as the last step in case something fails!
         await log_media_downloads(item)
         return resp

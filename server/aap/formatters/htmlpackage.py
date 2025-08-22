@@ -32,7 +32,9 @@ class HTMLPackageFormatter(BaseFormatter):
         def _get_source_ref(marker: str, item: dict[str, Any]) -> str:
             widest: int = -1
             src_rendition: str = ""
-            renditions: dict[str, Any] = item.get("associations", {}).get(marker, {}).get("renditions", [])
+            renditions: dict[str, Any] = (
+                item.get("associations", {}).get(marker, {}).get("renditions", [])
+            )
             for rendition in renditions:
                 width: int = (
                     item.get("associations", {})
@@ -66,7 +68,9 @@ class HTMLPackageFormatter(BaseFormatter):
             :return:
             """
             srcset = []
-            renditions: List[dict[str, Any]] = item.get("associations", {}).get(marker, {}).get("renditions", {})
+            renditions: List[dict[str, Any]] = (
+                item.get("associations", {}).get(marker, {}).get("renditions", {})
+            )
             for rendition in renditions:
                 ref = (
                     item.get("associations", {})
@@ -106,14 +110,21 @@ class HTMLPackageFormatter(BaseFormatter):
             embed_id = "editor_" + group
             elem.attrib["id"] = embed_id
             elem.attrib["src"] = (
-                item.get("associations").get(embed_id).get("renditions").get("original").get("href").lstrip("/")
+                item.get("associations")
+                .get(embed_id)
+                .get("renditions")
+                .get("original")
+                .get("href")
+                .lstrip("/")
             )
             elem.attrib.pop("alt", None)
             elem.attrib.pop("width", None)
             elem.attrib.pop("height", None)
             return True
 
-        update_embeds_in_body(item, update_image, update_video_or_audio, update_video_or_audio)
+        update_embeds_in_body(
+            item, update_image, update_video_or_audio, update_video_or_audio
+        )
 
     @staticmethod
     def rewire_featuremedia(item: dict[str, Any]) -> None:
@@ -122,14 +133,20 @@ class HTMLPackageFormatter(BaseFormatter):
         :param item:
         :return:
         """
-        renditions = item.get("associations", {}).get("featuremedia", {}).get("renditions", {})
+        renditions = (
+            item.get("associations", {}).get("featuremedia", {}).get("renditions", {})
+        )
         for _rendition_key, rendition_data in renditions.items():
             rendition_data["href"] = rendition_data.get("href", "").lstrip("/")
 
-    async def format_item(self, item: dict[str, Any], item_type: str | None = "items") -> bytes:
+    async def format_item(
+        self, item: dict[str, Any], item_type: str | None = "items"
+    ) -> bytes:
         await remove_unpermissioned_embeds(item)
         remove_internal_renditions(item, remove_media=False)
         self.rewire_embeded_images(item)
         self.rewire_featuremedia(item)
         await log_media_downloads(item)
-        return str.encode(await render_template("download_embed.html", item=item), "utf-8")
+        return str.encode(
+            await render_template("download_embed.html", item=item), "utf-8"
+        )
