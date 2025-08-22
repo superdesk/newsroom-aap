@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from superdesk.default_settings import env, strtobool # noqa
+from superdesk.default_settings import env, strtobool  # noqa
 from newsroom.news_api.default_settings import CORE_APPS, INSTALLED_APPS, BLUEPRINTS
 
 
@@ -12,4 +12,4 @@ CORE_APPS.extend([])
 INSTALLED_APPS.extend([])
 BLUEPRINTS.extend([])
 
-NEWS_API_ENABLED = strtobool(os.environ.get('NEWS_API_ENABLED', 'false'))
+NEWS_API_ENABLED = strtobool(os.environ.get("NEWS_API_ENABLED", "false"))
