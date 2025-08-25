@@ -8,7 +8,13 @@ from superdesk.core import json
 from superdesk.utc import utcnow
 
 from newsroom.tests import test_utils
-from newsroom.tests.fixtures import user, auth_users, items, init_items, init_auth  # noqa
+from newsroom.tests.fixtures import (  # noqa
+    user,
+    auth_users,
+    items,
+    init_items,
+    init_auth,
+)
 
 items_ids = [item["_id"] for item in items[:2]]
 item = items[:2][0]
@@ -144,13 +150,17 @@ wire_formats = [
     {
         "format": "html",
         "mimetype": "text/html",
-        "filename": test_utils.get_download_filename("amazon-bookstore-opening.html", item),
+        "filename": test_utils.get_download_filename(
+            "amazon-bookstore-opening.html", item
+        ),
         "test_content": html_content_test,
     },
     {
         "format": "html_media",
         "mimetype": "text/html",
-        "filename": test_utils.get_download_filename("amazon-bookstore-opening.html", item),
+        "filename": test_utils.get_download_filename(
+            "amazon-bookstore-opening.html", item
+        ),
         "test_content": html_content_test,
     },
 ]
@@ -169,10 +179,10 @@ async def test_ninjs_download(client, app):
             }
         ],
     )
-    user = await test_utils.find_one_for("users", req=None, first_name="admin")
-    assert user
+    admin_user = await test_utils.find_one_for("users", req=None, first_name="admin")
+    assert admin_user
     await test_utils.update_entries_for(
-        "users", user["_id"], {"company": "111111111111111111111111"}, user
+        "users", admin_user["_id"], {"company": "111111111111111111111111"}, admin_user
     )
     await test_utils.create_entries_for(
         "products",
@@ -189,10 +199,17 @@ async def test_ninjs_download(client, app):
     )
     app.general_setting("news_api_allowed_renditions", "Foo", default="16-9,4-3")
 
-    _file = await test_utils.download_zip_file(client, items_ids, "ninjspackage", "wire")
+    _file = await test_utils.download_zip_file(
+        client, items_ids, "ninjspackage", "wire"
+    )
     with ZipFile(_file) as zf:
-        assert test_utils.get_download_filename("amazon-bookstore-opening.json", item) in zf.namelist()
-        content = zf.open(test_utils.get_download_filename("amazon-bookstore-opening.json", item)).read()
+        assert (
+            test_utils.get_download_filename("amazon-bookstore-opening.json", item)
+            in zf.namelist()
+        )
+        content = zf.open(
+            test_utils.get_download_filename("amazon-bookstore-opening.json", item)
+        ).read()
     ninjs_content_test(content)
     history = await test_utils.get_all("history")
     assert 4 == len(history)
@@ -219,10 +236,10 @@ async def test_html_package_downloads(client, app):
             }
         ],
     )
-    user = await test_utils.find_one_for("users", req=None, first_name="admin")
-    assert user
+    admin_user = await test_utils.find_one_for("users", req=None, first_name="admin")
+    assert admin_user
     await test_utils.update_entries_for(
-        "users", user["_id"], {"company": "111111111111111111111111"}, user
+        "users", admin_user["_id"], {"company": "111111111111111111111111"}, admin_user
     )
     await test_utils.create_entries_for(
         "products",
@@ -239,10 +256,17 @@ async def test_html_package_downloads(client, app):
     )
     app.general_setting("news_api_allowed_renditions", "Foo", default="16-9,4-3")
 
-    _file = await test_utils.download_zip_file(client, items_ids, "html_package", "wire")
+    _file = await test_utils.download_zip_file(
+        client, items_ids, "html_package", "wire"
+    )
     with ZipFile(_file) as zf:
-        assert test_utils.get_download_filename("amazon-bookstore-opening.html", item) in zf.namelist()
-        content = zf.open(test_utils.get_download_filename("amazon-bookstore-opening.html", item)).read()
+        assert (
+            test_utils.get_download_filename("amazon-bookstore-opening.html", item)
+            in zf.namelist()
+        )
+        content = zf.open(
+            test_utils.get_download_filename("amazon-bookstore-opening.html", item)
+        ).read()
     html_content_test(content)
     history = await test_utils.get_all("history")
     assert 4 == len(history)

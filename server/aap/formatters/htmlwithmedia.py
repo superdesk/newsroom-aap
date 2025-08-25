@@ -1,8 +1,12 @@
-import flask
+from typing import Any
+import base64
 from lxml.html import HtmlElement
-from newsroom.types import Any
 from quart_babel import lazy_gettext
+
 from superdesk.flask import render_template
+
+from newsroom.core import get_current_wsgi_app
+from newsroom.types import SectionEnum
 from newsroom.formatters import BaseFormatter, FormatterAssetType
 from newsroom.wire.formatters.utils import (
     log_media_downloads,
@@ -13,8 +17,6 @@ from newsroom.news_api.utils import (
 )
 from newsroom.utils import update_embeds_in_body
 from newsroom.assets import ASSETS_RESOURCE
-from newsroom.types import SectionEnum
-import base64
 
 
 class HTMLMediaFormatter(BaseFormatter):
@@ -66,7 +68,8 @@ class HTMLMediaFormatter(BaseFormatter):
             .get(src_rendition, {})
             .get("mimetype", "")
         )
-        file = flask.current_app.media.get(src, ASSETS_RESOURCE)
+
+        file = get_current_wsgi_app().media.get(src, ASSETS_RESOURCE)
         b64 = (
             "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
         )
@@ -88,7 +91,7 @@ class HTMLMediaFormatter(BaseFormatter):
             .get("original", {})
             .get("mimetype", "")
         )
-        file = flask.current_app.media.get(src, ASSETS_RESOURCE)
+        file = get_current_wsgi_app().media.get(src, ASSETS_RESOURCE)
         b64 = (
             "data:{};base64,".format(mimetype) + base64.b64encode(file.read()).decode()
         )
@@ -145,7 +148,7 @@ class HTMLMediaFormatter(BaseFormatter):
                 .get(rendition)
                 .get("mimetype", "")
             )
-            file = flask.current_app.media.get(src, ASSETS_RESOURCE)
+            file = get_current_wsgi_app().media.get(src, ASSETS_RESOURCE)
             if file and mimetype:
                 item["associations"]["featuremedia"]["renditions"][rendition][
                     "href"
