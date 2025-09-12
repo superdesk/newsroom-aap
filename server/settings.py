@@ -96,3 +96,6 @@ INSTALLED_APPS = [
 ]
 
 NEWS_API_ENABLED = strtobool(os.environ.get("NEWS_API_ENABLED", "false"))
+
+WIRE_EMBED_PERMISSIONS = strtobool(os.environ.get("WIRE_EMBED_PERMISSIONS", "true"))
+
