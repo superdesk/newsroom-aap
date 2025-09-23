@@ -1,5 +1,5 @@
 from quart_babel import lazy_gettext
-from newsroom.utils import remove_all_embeds
+from newsroom.wire.embeds import remove_all_embeds
 from newsroom.wire.formatters import NINJSFormatter2
 
 

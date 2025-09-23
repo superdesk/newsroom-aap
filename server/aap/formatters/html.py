@@ -4,7 +4,7 @@ from newsroom.formatters import BaseFormatter, FormatterAssetType
 from quart_babel import lazy_gettext
 from newsroom.types import SectionEnum
 from superdesk.flask import render_template
-from newsroom.utils import remove_all_embeds
+from newsroom.wire.embeds import remove_all_embeds
 
 
 class HTMLFormatter(BaseFormatter):

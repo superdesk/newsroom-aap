@@ -8,14 +8,8 @@ from superdesk.flask import render_template
 from newsroom.core import get_current_wsgi_app
 from newsroom.types import SectionEnum
 from newsroom.formatters import BaseFormatter, FormatterAssetType
-from newsroom.wire.formatters.utils import (
-    log_media_downloads,
-    remove_unpermissioned_embeds,
-)
-from newsroom.news_api.utils import (
-    remove_internal_renditions,
-)
-from newsroom.utils import update_embeds_in_body
+from newsroom.wire.formatters.utils import log_media_downloads
+from newsroom.wire.embeds import remove_internal_renditions, apply_company_permissions_to_embeds, update_embeds_in_body
 from newsroom.assets import ASSETS_RESOURCE
 
 
@@ -98,8 +92,7 @@ class HTMLMediaFormatter(BaseFormatter):
         return b64
 
     def rewire_embedded_images(self, item: dict[str, Any]) -> None:
-        def update_image(item: dict[str, Any], elem: HtmlElement, group: str) -> bool:
-            embed_id: str = "editor_" + group
+        def update_image(item: dict[str, Any], elem: HtmlElement, embed_id: str) -> bool:
             elem.attrib["id"] = embed_id
             src = self.get_base64image(embed_id, item)
             if src:
@@ -107,9 +100,8 @@ class HTMLMediaFormatter(BaseFormatter):
             return True
 
         def update_video_or_audio(
-            item: dict[str, Any], elem: HtmlElement, group: str
+            item: dict[str, Any], elem: HtmlElement, embed_id: str
         ) -> bool:
-            embed_id: str = "editor_" + group
             elem.attrib["id"] = embed_id
             src = self.get_base64href(embed_id, item)
             if src:
@@ -160,7 +152,7 @@ class HTMLMediaFormatter(BaseFormatter):
     async def format_item(
         self, item: dict[str, Any], item_type: str | None = "items"
     ) -> bytes:
-        await remove_unpermissioned_embeds(item)
+        await apply_company_permissions_to_embeds([item], SectionEnum.WIRE)
         remove_internal_renditions(item)
         self.rewire_embedded_images(item)
         self.rewire_featuremedia(item)

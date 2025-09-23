@@ -2,11 +2,7 @@ from lxml.html import HtmlElement
 from newsroom.formatters import BaseFormatter, FormatterAssetType
 from quart_babel import lazy_gettext
 from newsroom.wire.formatters.utils import log_media_downloads
-from newsroom.news_api.utils import (
-    remove_internal_renditions,
-)
-from newsroom.utils import update_embeds_in_body
-from newsroom.wire.formatters.utils import remove_unpermissioned_embeds
+from newsroom.wire.embeds import remove_internal_renditions, apply_company_permissions_to_embeds, update_embeds_in_body
 from superdesk.logging import logger
 from superdesk.flask import render_template
 from newsroom.types import SectionEnum, Any, List
@@ -94,8 +90,7 @@ class HTMLPackageFormatter(BaseFormatter):
                 )
             return ",".join(srcset)
 
-        def update_image(item: dict[str, Any], elem: HtmlElement, group: str) -> bool:
-            embed_id: str = "editor_" + group
+        def update_image(item: dict[str, Any], elem: HtmlElement, embed_id: str) -> bool:
             elem.attrib["id"] = embed_id
             src: str = _get_source_ref(embed_id, item)
             if src:
@@ -106,8 +101,7 @@ class HTMLPackageFormatter(BaseFormatter):
                 elem.attrib["sizes"] = "80vw"
             return True
 
-        def update_video_or_audio(item, elem, group) -> bool:
-            embed_id = "editor_" + group
+        def update_video_or_audio(item, elem, embed_id) -> bool:
             elem.attrib["id"] = embed_id
             elem.attrib["src"] = (
                 item.get("associations")
@@ -142,7 +136,7 @@ class HTMLPackageFormatter(BaseFormatter):
     async def format_item(
         self, item: dict[str, Any], item_type: str | None = "items"
     ) -> bytes:
-        await remove_unpermissioned_embeds(item)
+        await apply_company_permissions_to_embeds([item], SectionEnum.WIRE)
         remove_internal_renditions(item, remove_media=False)
         self.rewire_embeded_images(item)
         self.rewire_featuremedia(item)

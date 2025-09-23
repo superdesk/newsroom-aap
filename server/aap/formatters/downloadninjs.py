@@ -3,14 +3,8 @@ from newsroom.formatters import FormatterAssetType
 from quart_babel import lazy_gettext
 from superdesk.logging import logger
 from newsroom.wire.formatters.ninjs import NINJSFormatter
-from newsroom.wire.formatters.utils import (
-    log_media_downloads,
-    remove_unpermissioned_embeds,
-)
-from newsroom.news_api.utils import (
-    remove_internal_renditions,
-)
-from newsroom.utils import update_embeds_in_body
+from newsroom.wire.formatters.utils import log_media_downloads
+from newsroom.wire.embeds import remove_internal_renditions, apply_company_permissions_to_embeds, update_embeds_in_body
 from newsroom.types import SectionEnum, Any
 
 
@@ -102,8 +96,7 @@ class NINJSDownloadFormatter(NINJSFormatter):
                 )
             return ",".join(srcset)
 
-        def update_image(item: dict[str, Any], elem: HtmlElement, group: str) -> bool:
-            embed_id = "editor_" + group
+        def update_image(item: dict[str, Any], elem: HtmlElement, embed_id: str) -> bool:
             elem.attrib["id"] = embed_id
             src = _get_source_ref(embed_id, item)
             if src:
@@ -115,9 +108,8 @@ class NINJSDownloadFormatter(NINJSFormatter):
             return True
 
         def update_video_or_audio(
-            item: dict[str, Any], elem: HtmlElement, group: str
+            item: dict[str, Any], elem: HtmlElement, embed_id: str
         ) -> bool:
-            embed_id = "editor_" + group
             elem.attrib["id"] = embed_id
             # cleanup the element to ensure the html will validate
             elem.attrib.pop("alt", None)
@@ -144,7 +136,7 @@ class NINJSDownloadFormatter(NINJSFormatter):
             rendition_data["href"] = rendition_data.get("href", "").lstrip("/")
 
     async def _transform_to_ninjs(self, item: dict[str, Any]):
-        await remove_unpermissioned_embeds(item)
+        await apply_company_permissions_to_embeds([item], SectionEnum.WIRE)
         # Remove the renditions we should not be showing the world
         remove_internal_renditions(item, remove_media=False)
         # set the references embedded in the html body of the story
