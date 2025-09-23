@@ -4,7 +4,11 @@ from quart_babel import lazy_gettext
 from superdesk.logging import logger
 from newsroom.wire.formatters.ninjs import NINJSFormatter
 from newsroom.wire.formatters.utils import log_media_downloads
-from newsroom.wire.embeds import remove_internal_renditions, apply_company_permissions_to_embeds, update_embeds_in_body
+from newsroom.wire.embeds import (
+    remove_internal_renditions,
+    apply_company_permissions_to_embeds,
+    update_embeds_in_body,
+)
 from newsroom.types import SectionEnum, Any
 
 
@@ -96,7 +100,9 @@ class NINJSDownloadFormatter(NINJSFormatter):
                 )
             return ",".join(srcset)
 
-        def update_image(item: dict[str, Any], elem: HtmlElement, embed_id: str) -> bool:
+        def update_image(
+            item: dict[str, Any], elem: HtmlElement, embed_id: str
+        ) -> bool:
             elem.attrib["id"] = embed_id
             src = _get_source_ref(embed_id, item)
             if src:

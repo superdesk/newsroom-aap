@@ -9,7 +9,11 @@ from newsroom.core import get_current_wsgi_app
 from newsroom.types import SectionEnum
 from newsroom.formatters import BaseFormatter, FormatterAssetType
 from newsroom.wire.formatters.utils import log_media_downloads
-from newsroom.wire.embeds import remove_internal_renditions, apply_company_permissions_to_embeds, update_embeds_in_body
+from newsroom.wire.embeds import (
+    remove_internal_renditions,
+    apply_company_permissions_to_embeds,
+    update_embeds_in_body,
+)
 from newsroom.assets import ASSETS_RESOURCE
 
 
@@ -92,7 +96,9 @@ class HTMLMediaFormatter(BaseFormatter):
         return b64
 
     def rewire_embedded_images(self, item: dict[str, Any]) -> None:
-        def update_image(item: dict[str, Any], elem: HtmlElement, embed_id: str) -> bool:
+        def update_image(
+            item: dict[str, Any], elem: HtmlElement, embed_id: str
+        ) -> bool:
             elem.attrib["id"] = embed_id
             src = self.get_base64image(embed_id, item)
             if src:

@@ -2,7 +2,11 @@ from lxml.html import HtmlElement
 from newsroom.formatters import BaseFormatter, FormatterAssetType
 from quart_babel import lazy_gettext
 from newsroom.wire.formatters.utils import log_media_downloads
-from newsroom.wire.embeds import remove_internal_renditions, apply_company_permissions_to_embeds, update_embeds_in_body
+from newsroom.wire.embeds import (
+    remove_internal_renditions,
+    apply_company_permissions_to_embeds,
+    update_embeds_in_body,
+)
 from superdesk.logging import logger
 from superdesk.flask import render_template
 from newsroom.types import SectionEnum, Any, List
@@ -90,7 +94,9 @@ class HTMLPackageFormatter(BaseFormatter):
                 )
             return ",".join(srcset)
 
-        def update_image(item: dict[str, Any], elem: HtmlElement, embed_id: str) -> bool:
+        def update_image(
+            item: dict[str, Any], elem: HtmlElement, embed_id: str
+        ) -> bool:
             elem.attrib["id"] = embed_id
             src: str = _get_source_ref(embed_id, item)
             if src:
