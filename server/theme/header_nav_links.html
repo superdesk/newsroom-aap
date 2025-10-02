@@ -1,14 +1,23 @@
 <div class="main navbar navbar-header_nav_links d-flex align-items-center justify-content-center">
-    {% for group in range(0, 10) %}
-        {% for nav in sidenavs(request.blueprint)|selectattr("group", "equalto", group) %}
-            {% if request.endpoint != nav.endpoint and nav.group != 1 %}
+    {% set fns = namespace(factcheck_shown=false) %}
+    {% for nav in sidenavs(request.blueprint)|sort(attribute='group') %}
+        {% set is_active_endpoint = request.endpoint == nav.endpoint %}
+        {% set is_group_one = nav.group == 1 %}
+        {% set is_factcheck = nav.get('name') == 'FactCheck' %}
+
+        {% if not is_active_endpoint and not is_group_one %}
+            {% if not is_factcheck or not fns.factcheck_shown %}
                 <div>
                     <a href="{{ url_for(nav.endpoint) if nav.endpoint else nav.url }}"
-                       {% if nav.url %}target="_blank"{% endif %}
-                    >{{ gettext(nav.name) }}
+                       {% if nav.url %}target="_blank"{% endif %}>
+                        {{ gettext(nav.name) }}
                     </a>
                 </div>
             {% endif %}
-        {% endfor %}
+        {% endif %}
+
+        {% if is_factcheck %}
+            {% set fns.factcheck_shown = true %}
+        {% endif %}
     {% endfor %}
 </div>
