@@ -101,3 +101,5 @@ WIRE_EMBED_PERMISSIONS = strtobool(os.environ.get("WIRE_EMBED_PERMISSIONS", "tru
 USE_EMBED_PERMISSIONS_IN_DASHBOARD = strtobool(
     os.environ.get("WIRE_EMBED_PERMISSIONS", "false")
 )
+
+WIRE_TIME_FILTERS = []
