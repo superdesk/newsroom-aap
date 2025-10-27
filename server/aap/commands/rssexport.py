@@ -103,7 +103,9 @@ class RSSExport(AAPRSSFormatter):
                 if not item.get("pubstatus") == "usable" and not self.include_kills:
                     continue
 
-                original_item = super().get_original_item(complete_item, original_docs)
+                original_item = await super().get_original_item(
+                    complete_item, original_docs
+                )
                 if original_item:
                     item["original_headline"] = original_item.get("headline", None)
 

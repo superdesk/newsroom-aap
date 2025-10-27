@@ -4,14 +4,13 @@ import re
 import unicodedata
 from typing import List, Any
 from urllib.parse import urljoin, urlparse
+from motor.motor_asyncio import AsyncIOMotorCollection
 
 from email.utils import format_datetime
 
-from eve.utils import ParsedRequest
 from lxml import etree
 from lxml.etree import Element, SubElement, QName
 
-from superdesk import get_resource_service
 from superdesk.core import get_app_config
 from superdesk.core.types import Request, Response
 from superdesk.flask import url_for
@@ -77,7 +76,7 @@ class AAPRSSFormatter(RSSFormatter):
         )
         return {i.id: i.to_dict() async for i in cursor}
 
-    def get_original_item(
+    async def get_original_item(
         self, complete_item: dict, original_docs: dict[str, Any]
     ) -> dict | None:
         """
@@ -96,22 +95,18 @@ class AAPRSSFormatter(RSSFormatter):
                 logger.error(
                     "original_item not found for {}".format(complete_item.get("_id"))
                 )
-        else:  # handle the kills, takedowns and corrections, they should bot be that common
+        else:  # handle the kills, takedowns and corrections, they should not be that common
             if not complete_item.get("pubstatus") == "usable" or not complete_item.get(
                 "firstpublished"
             ) == complete_item.get("versioncreated"):
-                req = ParsedRequest()
-                req.sort = (
-                    "[('_current_version', 1)]"  # make sure the oldest version is first
+                wire_service = WireSearchServiceAsync().service
+                collection: AsyncIOMotorCollection = wire_service.mongo_versioned_async
+
+                original_item = await collection.find_one(
+                    {"_id_document": complete_item.get("_id")},
+                    sort=[("_current_version", 1)],
                 )
-                versions = list(
-                    get_resource_service("items_versions").get_from_mongo(
-                        req=req, lookup={"_id_document": complete_item.get("_id")}
-                    )
-                )
-                if len(versions):
-                    original_item = versions[0]
-                else:
+                if not original_item:
                     logger.warning(
                         "no original version found for killed/corrected item {}".format(
                             complete_item.get("_id")
@@ -180,7 +175,9 @@ class AAPRSSFormatter(RSSFormatter):
                 if not complete_item:
                     continue
 
-                original_item = self.get_original_item(complete_item, original_docs)
+                original_item = await self.get_original_item(
+                    complete_item, original_docs
+                )
                 if original_item:
                     complete_item["original_headline"] = original_item.get(
                         "headline", None

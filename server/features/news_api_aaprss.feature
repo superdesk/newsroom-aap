@@ -142,7 +142,13 @@ Feature: News API AAP-RSS Feed
         """
     Given "items_versions"
         """
-        [{"_id_document":"urn-1234567890",
+        [
+        {"_id_document":"urn-1234567890",
+        "body_html": "<p>Once upon a time there was a fish who could swim</p>", "headline": "updated headline 1",
+        "byline": "S Smith", "pubstatus": "canceled", "service" : [{"name" : "Australian General News", "code" : "a"}],
+        "description_text": "summary",
+         "firstpublished": "#DATE-1#", "versioncreated": "#DATE-1#", "_current_version": 2},
+        {"_id_document":"urn-1234567890",
         "body_html": "<p>Once upon a time there was a fish who could swim</p>", "headline": "headline 1",
         "byline": "S Smith", "pubstatus": "canceled", "service" : [{"name" : "Australian General News", "code" : "a"}],
         "description_text": "summary",
@@ -152,6 +158,7 @@ Feature: News API AAP-RSS Feed
     When we get "aap-rss"
     Then we get OK response
     Then we "get" "<licensed_news:deleted>yes</licensed_news:deleted>" in rss xml response
+    Then we "get" "<link>https://aapnews.com.au/news/headline-1</link>" in rss xml response
 
   Scenario: A story corrected
     Given "products"
