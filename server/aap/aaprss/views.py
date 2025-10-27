@@ -7,7 +7,7 @@ aap_rss_endpoints = EndpointGroup("aaprss", __name__)
 
 
 class RSSArgs(BaseModel):
-    days: int | None = "2"
+    days: int | None = 2
 
 
 @aap_rss_endpoints.endpoint("aap-rss", methods=["GET"])
