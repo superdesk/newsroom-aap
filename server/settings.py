@@ -96,8 +96,10 @@ INSTALLED_APPS = [
 ]
 
 NEWS_API_ENABLED = strtobool(os.environ.get("NEWS_API_ENABLED", "false"))
-
+ALLOW_PICTURE_DOWNLOAD = strtobool(os.environ.get("ALLOW_PICTURE_DOWNLOAD", "false"))
 WIRE_EMBED_PERMISSIONS = strtobool(os.environ.get("WIRE_EMBED_PERMISSIONS", "true"))
 USE_EMBED_PERMISSIONS_IN_DASHBOARD = strtobool(
     os.environ.get("WIRE_EMBED_PERMISSIONS", "false")
 )
+
+WIRE_TIME_FILTERS = []
