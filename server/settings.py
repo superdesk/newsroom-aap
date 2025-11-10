@@ -78,7 +78,7 @@ CLIENT_CONFIG.update(
         "list_animations": False,
     }
 )
-CLIENT_CONFIG['locale_formats']['en']['DATE_FORMAT_HEADER'] = "EEEE, MMMM d, yyyy"
+CLIENT_CONFIG["locale_formats"]["en"]["DATE_FORMAT_HEADER"] = "EEEE, MMMM d, yyyy"
 
 # We want the section filter to be last
 # So we remove it from CORE_APPS and place after
