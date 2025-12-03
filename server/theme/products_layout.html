@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
     {% block topnav %}
-        <nav class="main navbar">
+        <nav class="main navbar divider">
             <h3 class="a11y-only">{{ gettext('Main Navigation Bar') }}</h3>
             {% block logo %}
             {% include 'logo.html' %}
@@ -45,8 +45,8 @@
             {% endfor %}
         {% endfor %}
         {% if ns.currentNav %}
-        <nav class="main navbar navbar-header_1 navbar-header_1--small">
-            {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') not in ['aapX', 'AM'] else ns.currentNav.name }}
+        <nav class="navbar-header_1 navbar-header_1--small divider extra-header">
+            {{  gettext(ns.currentNav.get('name').lower()) if ns.currentNav.get('name') not in ['aapX'] else ns.currentNav.name }}
         </nav>
         {% endif %}
         {% include 'header_nav_links.html' %}

@@ -1,16 +1,13 @@
 {% extends "home_default.html" %}
     {% block topnav %}
-        <nav class="main navbar">
+        <nav class="main navbar divider">
             <h3 class="a11y-only">{{ gettext('Main Navigation Bar') }}</h3>
             {% block logo %}
             {% include 'logo.html' %}
             {% endblock %}
-            <div class="navbar-brand">
-                <nav>
-                    {% block breadcrumb %}{% endblock %}
-                </nav>
+            <div class="navbar-brand navbar-brand__no__seperator">
+            <div class="breadcrumb-item active navbar-header_tagline">{{ gettext('EVERY TOOL   ·   EVERY ADVANTAGE   ·   EVERYTHING NEWSROOMS NEED') }}</div>
             </div>
-            <div class="navbar-header_tagline">{{ gettext('EVERY TOOL   ·   EVERY ADVANTAGE   ·   EVERYTHING NEWSROOMS NEED') }}</div>
 
             {% include "impersonate_user.html" %}
 
@@ -36,7 +33,7 @@
             {% endif %}
             {% endblock %}
         </nav>
-        <nav class="main navbar navbar-header_1 navbar-header_1--small">
+        <nav class="navbar-header_1 navbar-header_1--small divider extra-header">
             {{ gettext(' aap newsroom ') }}
         </nav>
         {% include 'header_nav_links.html' %}
