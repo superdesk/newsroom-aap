@@ -125,7 +125,10 @@ class AAPRSSFormatter(RSSFormatter):
         try:
             if item["associations"]["featuremedia"]["renditions"]:
                 self.set_item_featuremedia_details(
-                    entry, item["associations"]["featuremedia"], token
+                    entry,
+                    item["associations"]["featuremedia"],
+                    token=token,
+                    item_id=item.get("_id"),
                 )
         except (KeyError, TypeError):
             pass
