@@ -27,9 +27,9 @@
     --color-text-link--navbar: hsl(0, 0%, 100%);
     /*!* Logo main *!*/
     --top-bar-logo-main-max-width: 80px;
-    /*--top-bar-logo-main-max-width--mobile: 160px;*/
-    /*--top-bar-logo-main-margin-top: -9px;*/
-    /*--top-bar-logo-main-margin-top--mobile: -6px;*/
+    --top-bar-logo-main-max-width--mobile: 100%;
+    --top-bar-logo-main-margin-top: -0px;
+    --top-bar-logo-main-margin-top--mobile: -0px;
     /*!* Logo additional *!*/
     /*--top-bar-logo-additional-display: flex;*/
     /*--top-bar-logo-additional-max-width: 78px;*/
@@ -106,4 +106,21 @@
 /* Default expects a 16-9 thumbnail AAP uses 4:3 */
 .card-img-top-wrapper.card-img-top-wrapper--aspect-16-9 {
     padding-block-end: 75% !important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .navbar-header_tagline {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar-header_nav_links {
+        display: none; !important;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .extra-header {
+        display: none; !important;
+    }
 }
