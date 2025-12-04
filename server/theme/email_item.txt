@@ -1,0 +1,7 @@
+{{ item.headline }}
+
+{% if item.slugline %}Slugline: {{ item.slugline }}{% endif %}
+{% if item.headline %}Headline: {{ item.headline }}{% endif %}
+{% if item.service %}Category: {{ item.service.0.name }}{% endif %}
+Published: {{ item.versioncreated | datetime_long }}
+Link: {{ url_for_wire(item, True, section) }}
