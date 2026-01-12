@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title></title>
+{% block htmlhead %}{% endblock %}
+</head>
+<body>
+{% block name %}{% if name %}<p>Hi {{ name }},</p>
+
+{% endif %}{% endblock %}
+{% block content %}{% endblock %}
+
+{% block footer %}
+    {% include 'email_footer.html' %}
+{% endblock %}
+</body>
+</html>
+
