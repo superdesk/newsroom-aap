@@ -1,4 +1,4 @@
-<div class="navbar-header_nav_links d-flex align-items-center justify-content-center extra-header">
+<div class="navbar-header_nav_links align-items-center justify-content-center extra-header">
     {% set fns = namespace(factcheck_shown=false) %}
     {% for nav in sidenavs(request.blueprint)|sort(attribute='group') %}
         {% set is_active_endpoint = request.endpoint == nav.endpoint %}
