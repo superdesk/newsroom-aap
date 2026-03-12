@@ -108,7 +108,7 @@ Feature: News API AAP-RSS Feed
         """
     When we get "aap-rss"
     Then we get OK response
-    Then we "get" "<link>https://aapnews.com.au/news/headline-1</link>" in rss xml response
+    Then we "get" "<link>https://aapnews.aap.com.au/news/headline-1</link>" in rss xml response
 
   Scenario: A story killed
     Given "products"
@@ -158,7 +158,7 @@ Feature: News API AAP-RSS Feed
     When we get "aap-rss"
     Then we get OK response
     Then we "get" "<licensed_news:deleted>yes</licensed_news:deleted>" in rss xml response
-    Then we "get" "<link>https://aapnews.com.au/news/headline-1</link>" in rss xml response
+    Then we "get" "<link>https://aapnews.aap.com.au/news/headline-1</link>" in rss xml response
 
   Scenario: A story corrected
     Given "products"
@@ -201,4 +201,4 @@ Feature: News API AAP-RSS Feed
         """
     When we get "aap-rss"
     Then we get OK response
-    Then we "get" "<link>https://aapnews.com.au/news/headline-1</link>" in rss xml response
+    Then we "get" "<link>https://aapnews.aap.com.au/news/headline-1</link>" in rss xml response
