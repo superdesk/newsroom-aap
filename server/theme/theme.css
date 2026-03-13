@@ -124,3 +124,11 @@
         display: none; !important;
     }
 }
+
+figcaption {
+    font-size: var(--text-size--medium);
+    color: var(--color-text--muted);
+    margin: var(--space--1-5) var(--space--3);
+    line-height: 1.2;
+    display: block; /* Ensures margins and line-height behave consistently */
+}
