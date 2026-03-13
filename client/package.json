@@ -7,6 +7,6 @@
     "newsroom-core": "github:superdesk/newsroom-core#develop"
   },
   "volta": {
-    "node": "14.21.3"
+    "node": "22.22.0"
   }
 }
