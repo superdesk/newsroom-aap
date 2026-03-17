@@ -224,7 +224,7 @@ class RSSExport(AAPRSSFormatter):
 @click.option(
     "-u",
     "--url",
-    default="https://aapnews.com.au/news",
+    default="https://aapnews.aap.com.au/news",
     help='The URL that the items will reference, defaults to "https://aapnews.aap.com.au/news"',
 )
 @click.option(

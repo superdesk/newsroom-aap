@@ -39,7 +39,7 @@ class AAPRSSFormatter(RSSFormatter):
     }
     item_field: str = "item"
     item_id_field: str = "id"
-    public_url = "https://aapnews.com.au/news/"
+    public_url = "https://aapnews.aap.com.au/news/"
 
     async def get_db_docs(self, items: List[dict[str, Any]]) -> dict[str, Any]:
         """

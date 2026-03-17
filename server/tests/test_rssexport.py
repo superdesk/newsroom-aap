@@ -59,4 +59,4 @@ async def test_rssexport(app, tmp_path):
 
     link = item.find("link")
     assert link is not None, "<item> must have a <link>"
-    assert link.text == "https://aapnews.com.au/news/test-headline"
+    assert link.text == "https://aapnews.aap.com.au/news/test-headline"
