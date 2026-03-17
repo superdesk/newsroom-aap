@@ -76,6 +76,17 @@ CLIENT_CONFIG.update(
         "multimedia_website_search_url": MULTIMEDIA_WEBSITE_SEARCH_URL,
         "display_all_versions_toggle": False,
         "list_animations": False,
+        "date_format": "d/MMM/YYYY",
+        "advanced_search": {
+            "fields": {
+                "wire": ["headline", "slugline", "body_html"],
+                "monitoring": ["headline", "slugline", "body_html"],
+                "aapX": ["headline", "slugline", "body_html"],
+                "factcheck": ["headline", "slugline", "body_html"],
+                "media_releases": ["headline", "slugline", "body_html"],
+                "agenda": ["name", "description"],
+            },
+        },
     }
 )
 CLIENT_CONFIG["locale_formats"]["en"]["DATE_FORMAT_HEADER"] = "EEEE, MMMM d, yyyy"
@@ -103,6 +114,25 @@ USE_EMBED_PERMISSIONS_IN_DASHBOARD = strtobool(
     os.environ.get("WIRE_EMBED_PERMISSIONS", "false")
 )
 
-WIRE_TIME_FILTERS = []
+WIRE_TIME_FILTERS = [
+    {
+        "name": lazy_gettext("Last 24 hours"),
+        "filter": "last_24_hours",
+        "default": False,
+        "query": {"gte": "now-24h/m"},
+    },
+    {
+        "name": lazy_gettext("Last 14 days"),
+        "filter": "last_14_days",
+        "default": False,
+        "query": {"gte": "now-14d/h"},
+    },
+    {
+        "name": lazy_gettext("Last 30 days"),
+        "filter": "last_30_days",
+        "default": True,
+        "query": {"gte": "now-30d/h"},
+    },
+]
 
 PERMISSION_DASHBOARD_CARDS = True
