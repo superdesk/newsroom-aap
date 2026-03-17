@@ -3,16 +3,18 @@ import json
 import logging
 from datetime import timedelta
 from lxml import html as lxml_html
+from lxml import etree
 from urllib import parse
-import re
 from PIL import Image
 from copy import deepcopy
+
 from superdesk.core import get_current_app
 from superdesk.utc import utcnow
 from superdesk.etree import to_string
 from newsroom.utils import parse_date_str
 from newsroom.media_utils import generate_renditions, store_image, get_watermark
 from newsroom.assets import ASSETS_RESOURCE
+from newsroom.wire.embeds import iterate_embeds
 from PyRTF.document.paragraph import Paragraph
 from PyRTF.Elements import LINE
 
@@ -177,9 +179,9 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
             app.config.get("EXPLAINERS_WEBSITE_URL"), keyword_filter, date_range_filter
         )
     elif content_type == "graphic":
-        return '{}"supplementalcategory:gra/Static Graphics/?q={{{}, {}}}'.format(
+        return '{}"{}"?q={{"supplementalcategory":"gra",{}}}'.format(
             app.config.get("MULTIMEDIA_WEBSITE_SEARCH_URL"),
-            keyword_filter,
+            slugline,
             date_range_filter,
         )
     else:
@@ -189,6 +191,8 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
 
 
 def generate_embed_renditions(item):
+    app = get_current_app().as_any()
+
     def _get_source_ref(marker, item):
         try:
             return (
@@ -198,7 +202,7 @@ def generate_embed_renditions(item):
                 .get("_newsroom_custom")
                 .get("href")
             )
-        except Exception:
+        except (AttributeError, TypeError):
             return None
 
     has_editor_assoc = False
@@ -211,49 +215,75 @@ def generate_embed_renditions(item):
             has_editor_assoc = True
 
     if has_editor_assoc:
-        # parse out any editor embeds in the item and re-point to the required rendition
-        regex = r" EMBED START Image {id: \"editor_([0-9]+)"
         html_updated = False
         root_elem = lxml_html.fromstring(item.get("body_html", ""))
-        comments = root_elem.xpath("//comment()")
-        for comment in comments:
-            if "EMBED START Image" in comment.text:
-                m = re.search(regex, comment.text)
-                # Assumes the sibling of the Embed Image comment is the figure tag containing the image
-                figure_elem = comment.getnext()
+        for comment, editor_id in iterate_embeds(root_elem):
+            figure_elem = comment.xpath("following-sibling::figure[1]")
+            if figure_elem:
+                figure_elem = figure_elem[0]
                 if figure_elem is not None and figure_elem.tag == "figure":
-                    imgElem = figure_elem.find("./img")
-                    if imgElem is not None and m and m.group(1):
-                        embed_id = "editor_" + m.group(1)
-                        imgElem.attrib["id"] = embed_id
-                        src = _get_source_ref(embed_id, item)
+                    elem = figure_elem.find("./img")
+                    if elem is not None:
+                        elem.attrib["id"] = editor_id
+                        src = _get_source_ref(editor_id, item)
                         if src:
-                            imgElem.attrib["src"] = src
-                        html_updated = True
+                            elem.attrib["src"] = src
+                            html_updated = True
+
+            embed_item = (item.get("associations") or {}).get(editor_id) or {}
+            byline = embed_item.get("byline")
+            guid = embed_item.get("guid", None)
+
+            embed_link_url = (
+                embed_item.get("guid")
+                if isinstance(guid, str) and len(guid) == 20 and guid.isdigit()
+                else None
+            )
+            if embed_link_url:
+                embed_link_url = (
+                    app.config.get("MULTIMEDIA_WEBSITE_SEARCH_URL") + embed_link_url
+                )
+            caption_results = comment.xpath(
+                "./following-sibling::figure[1]//figcaption"
+            )
+            if caption_results:
+                caption_elem = caption_results[0]
+                current_text = (caption_elem.text or "").strip()
+                caption_elem.text = f"{current_text} (" if current_text else "("
+                if embed_link_url:
+                    a_tag = etree.SubElement(caption_elem, "a")
+                    a_tag.set("href", embed_link_url)
+                    a_tag.text = byline
+                    a_tag.tail = ")"
+                else:
+                    caption_elem.text += f"{byline})"
+                html_updated = True
+
         if html_updated:
             item["body_html"] = to_string(root_elem, method="html")
-            # If there is no feature media them copy the last embedded image to be the feature media
-            if not ((item.get("associations") or {}).get("featuremedia") or {}).get(
-                "renditions"
-            ):
-                item["associations"]["featuremedia"] = deepcopy(
-                    item.get("associations").get(embed_id)
-                )
-                generate_renditions(item)
 
-    if "claim_verdict" in item.get("extra", {}):
-        item["body_html"] = (
-            "<p><b>OUR VERDICT</b></p>"
-            + item.get("extra", {}).get("claim_verdict", "")
-            + item.get("body_html")
-        )
+        # If there is no feature media them copy the last embedded image to be the feature media
+        if not ((item.get("associations") or {}).get("featuremedia") or {}).get(
+            "renditions"
+        ):
+            item["associations"]["featuremedia"] = deepcopy(
+                item.get("associations").get(editor_id)
+            )
+            generate_renditions(item)
 
-    if "claim_short_text" in item.get("extra", {}):
-        item["body_html"] = (
-            "<p><b>WHAT WAS CLAIMED</b></p>"
-            + item.get("extra", {}).get("claim_short_text", "")
-            + item.get("body_html")
+    extra = item.get("extra") or {}
+
+    # Prepend verdict if present
+    if "claim_verdict" in extra:
+        verdict_html = f"<p><b>OUR VERDICT</b></p>{extra.get('claim_verdict', '')}"
+        item["body_html"] = verdict_html + (item.get("body_html") or "")
+
+    # Prepend short text if present
+    if "claim_short_text" in extra:
+        claim_html = (
+            f"<p><b>WHAT WAS CLAIMED</b></p>{extra.get('claim_short_text', '')}"
         )
+        item["body_html"] = claim_html + (item.get("body_html") or "")
 
 
 def generate_preview_details_renditions(picture, src_rendition="16-9"):
