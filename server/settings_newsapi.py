@@ -20,4 +20,5 @@ MODULES.extend(["aap.aaprss"])
 
 NEWS_API_ENABLED = strtobool(os.environ.get("NEWS_API_ENABLED", "false"))
 COPYRIGHT_HOLDER = "AAP"
-DATE_FORMAT = "%Y-%m-%dT%H:%M:%S+00:00"
+API_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S+0000"
+SITE_NAME = "AAP Newsroom"
