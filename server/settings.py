@@ -26,7 +26,7 @@ WEBPACK_MANIFEST_PATH = os.environ.get(
     "WEBPACK_MANIFEST_PATH", CLIENT_PATH.joinpath("dist", "manifest.json")
 )
 
-CONTACT_ADDRESS = "https://www.aap.com.au/contact"
+CONTACT_ADDRESS = "https://www.aap.com.au/about/contact"
 SITE_NAME = "AAP Newsroom"
 COPYRIGHT_HOLDER = "AAP"
 COPYRIGHT_NOTICE = ""
@@ -136,3 +136,6 @@ WIRE_TIME_FILTERS = [
 ]
 
 PERMISSION_DASHBOARD_CARDS = True
+
+# Our IPTC subjects don't include a scheme, so we whitelist none, it keeps any others out!
+WIRE_SUBJECT_SCHEME_WHITELIST = [None]
