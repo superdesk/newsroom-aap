@@ -15,8 +15,12 @@ class DataUpdate(BaseDataUpdate):
     resource = "users"
     use_async_resources = True
 
-    async def forwards(self, collection: AsyncIOMotorCollection, database: AsyncIOMotorDatabase) -> None:
+    async def forwards(
+        self, collection: AsyncIOMotorCollection, database: AsyncIOMotorDatabase
+    ) -> None:
         await collection.update_many({}, {"$set": {"locale": "en"}})
 
-    async def backwards(self, collection: AsyncIOMotorCollection, database: AsyncIOMotorDatabase) -> None:
+    async def backwards(
+        self, collection: AsyncIOMotorCollection, database: AsyncIOMotorDatabase
+    ) -> None:
         raise NotImplementedError()
