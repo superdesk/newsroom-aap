@@ -1,174 +1,322 @@
 [
-{
-    "_id" : "aapX",
-    "preview" : {
-        "slugline" : {
-            "displayed" : false
-        },
-        "urgency" : {
-            "displayed" : false
-        },
-        "genre" : {
-            "displayed" : false
-        },
-        "item_versions" : {
-            "displayed" : false
-        },
-        "byline" : {
-            "displayed" : false
-        },
-        "located" : {
-            "displayed" : false
-        },
-        "tags_section" : {
-            "displayed" : false
-        },
-        "charcount" : {
-            "displayed" : false
-        }
+  {
+    "_id": "aapX",
+    "preview": {
+      "slugline": {
+        "displayed": false
+      },
+      "urgency": {
+        "displayed": false
+      },
+      "genre": {
+        "displayed": false
+      },
+      "item_versions": {
+        "displayed": false
+      },
+      "byline": {
+        "displayed": false
+      },
+      "located": {
+        "displayed": false
+      },
+      "tags_section": {
+        "displayed": false
+      },
+      "charcount": {
+        "displayed": false
+      }
     },
-    "details" : {
-        "slugline" : {
-            "displayed" : false
-        },
-        "urgency" : {
-            "displayed" : false
-        },
-        "genre" : {
-            "displayed" : false
-        },
-        "item_versions" : {
-            "displayed" : false
-        },
-        "tags_section" : {
-            "displayed" : false
-        },
-        "charcount" : {
-            "displayed" : false
-        }
+    "details": {
+      "slugline": {
+        "displayed": false
+      },
+      "urgency": {
+        "displayed": false
+      },
+      "genre": {
+        "displayed": false
+      },
+      "item_versions": {
+        "displayed": false
+      },
+      "tags_section": {
+        "displayed": false
+      },
+      "charcount": {
+        "displayed": false
+      }
     },
-    "advanced_search_tabs" : {
-        "topics" : false,
-        "nav" : true,
-        "filters" : true
+    "advanced_search_tabs": {
+      "topics": false,
+      "nav": true,
+      "filters": true
     },
-    "multi_select_topics" : false
-},
-{
-    "_id" : "wire",
-    "preview" : {
-        "charcount" : {
-            "displayed" : false
-        },
-        "agenda_links" : {
-            "displayed" : true
-        },
-        "media" : {
-            "displayed" : false
-        }
+    "multi_select_topics": false,
+    "search": false,
+    "enable_global_topics": true,
+    "open_coverage_content_in_same_page": false
+  },
+  {
+    "_id": "wire",
+    "preview": {
+      "slugline": {
+        "displayed": true
+      },
+      "metadata_fields": [
+        "urgency",
+        "source",
+        "expiry",
+        "duration",
+        "wordcount",
+        "previous_versions",
+        "embargo"
+      ]
     },
-    "details" : {
-        "charcount" : {
-            "displayed" : false
-        },
-        "agenda_links" : {
-            "displayed" : true
-        },
-        "media" : {
-            "displayed" : false
-        }
+    "details": {
+      "charcount": {
+        "displayed": false
+      },
+      "agenda_links": {
+        "displayed": true
+      },
+      "media": {
+        "displayed": false
+      },
+      "metadata_fields": [
+        "urgency",
+        "wordcount",
+        "source"
+      ]
     },
-    "multi_select_topics" : true
-},
-{
-    "_id" : "media_releases",
-    "preview" : {
-        "urgency" : {
-            "displayed" : false
-        },
-        "genre" : {
-            "displayed" : false
-        },
-        "item_versions" : {
-            "displayed" : false
-        },
-        "byline" : {
-            "displayed" : false
-        },
-        "located" : {
-            "displayed" : false
-        },
-        "tags_section" : {
-            "displayed" : false
-        },
-        "follow_story" : {
-            "displayed" : false
-        },
-        "charcount" : {
-            "displayed" : false
-        }
+    "multi_select_topics": false,
+    "list": {
+      "wordcount": {
+        "displayed": true
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "slugline": {
+        "displayed": true
+      },
+      "metadata_fields": [
+        "embargo",
+        "source",
+        "//",
+        "wordcount",
+        "//",
+        "versioncreated"
+      ]
     },
-    "details" : {
-        "follow_story" : {
-            "displayed" : false
-        },
-        "urgency" : {
-            "displayed" : false
-        },
-        "genre" : {
-            "displayed" : false
-        },
-        "item_versions" : {
-            "displayed" : false
-        },
-        "tags_section" : {
-            "displayed" : false
-        },
-        "charcount" : {
-            "displayed" : false
-        }
+    "enable_global_topics": true,
+    "open_coverage_content_in_same_page": false,
+    "search": false
+  },
+  {
+    "_id": "media_releases",
+    "preview": {
+      "urgency": {
+        "displayed": false
+      },
+      "genre": {
+        "displayed": false
+      },
+      "item_versions": {
+        "displayed": false
+      },
+      "byline": {
+        "displayed": false
+      },
+      "located": {
+        "displayed": false
+      },
+      "tags_section": {
+        "displayed": false
+      },
+      "follow_story": {
+        "displayed": false
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "metadata_fields": [
+        "slugline",
+        "wordcount",
+        "anpa_take_key"
+      ]
     },
-    "advanced_search_tabs" : {
-        "topics" : false,
-        "nav" : false,
-        "filters" : true
+    "details": {
+      "follow_story": {
+        "displayed": false
+      },
+      "urgency": {
+        "displayed": false
+      },
+      "genre": {
+        "displayed": false
+      },
+      "item_versions": {
+        "displayed": false
+      },
+      "tags_section": {
+        "displayed": false
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "metadata_fields": [
+        "slugline",
+        "wordcount"
+      ]
     },
-    "multi_select_topics" : false
-},
-{
-    "_id" : "agenda",
-    "multi_select_topics" : true
-},
-{
-    "_id" : "monitoring",
-    "advanced_search_tabs" : {
-        "filters" : true,
-        "nav" : true,
-        "topics" : false
+    "advanced_search_tabs": {
     },
-    "details" : {
-        "media" : {
-            "displayed" : false
-        }
-    },
-    "multi_select_topics" : false,
-    "preview" : {
-        "media" : {
-            "displayed" : false
-        }
+    "multi_select_topics": false,
+    "search": false,
+    "enable_global_topics": true,
+    "open_coverage_content_in_same_page": false,
+    "list": {
+      "wordcount": {
+        "displayed": true
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "slugline": {
+        "displayed": false
+      },
+      "anpa_take_key": {
+        "displayed": true
+      },
+      "metadata_fields": [
+        "source",
+        "//",
+        "wordcount",
+        "//",
+        "versioncreated"
+      ]
     }
-},
-{
-    "_id" : "factcheck",
-    "details" : {
-        "media" : {
-            "displayed" : false
-        }
+  },
+  {
+    "_id": "agenda",
+    "multi_select_topics": true,
+    "search": false,
+    "enable_global_topics": true,
+    "open_coverage_content_in_same_page": false
+  },
+  {
+    "_id": "monitoring",
+    "preview": {
+      "media": {
+        "displayed": false
+      }
     },
-    "preview" : {
-        "media" : {
-            "displayed" : false
-        }
+    "details": {
+      "media": {
+        "displayed": false
+      }
+    },
+    "advanced_search_tabs": {
+    },
+    "multi_select_topics": false,
+    "search": false,
+    "enable_global_topics": true,
+    "open_coverage_content_in_same_page": false,
+    "list": {
+      "wordcount": {
+        "displayed": true
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "slugline": {
+        "displayed": true
+      },
+      "metadata_fields": [
+        "source",
+        "//",
+        "wordcount",
+        "//",
+        "versioncreated"
+      ]
     }
-}
+  },
+  {
+    "_id": "factcheck",
+    "preview": {
+      "media": {
+        "displayed": false
+      }
+    },
+    "details": {
+      "media": {
+        "displayed": false
+      }
+    },
+    "multi_select_topics": false,
+    "search": false,
+    "enable_global_topics": true,
+    "open_coverage_content_in_same_page": false
+  },
+  {
+    "_id": "home",
+    "list": {
+      "wordcount": {
+        "displayed": true
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "slugline": {
+        "displayed": true
+      },
+      "metadata_fields": [
+        "embargo",
+        "source",
+        "//",
+        "wordcount",
+        "//",
+        "versioncreated"
+      ]
+    },
+    "preview": {
+      "slugline": {
+        "displayed": true
+      },
+      "metadata_fields": [
+        "urgency",
+        "source",
+        "expiry",
+        "duration",
+        "wordcount",
+        "previous_versions",
+        "embargo"
+      ]
+    },
+    "details": {
+      "wordcount": {
+        "displayed": true
+      },
+      "charcount": {
+        "displayed": false
+      },
+      "slugline": {
+        "displayed": true
+      },
+      "gallery": {
+        "displayed": false
+      },
+      "metadata_fields": [
+        "urgency",
+        "source",
+        "expiry",
+        "duration",
+        "wordcount",
+        "previous_versions",
+        "embargo"
+      ]
+    },
+    "search": true
+  }
 ]
