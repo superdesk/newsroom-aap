@@ -11,7 +11,6 @@ from typing import Any
 from motor.motor_asyncio import AsyncIOMotorCollection, AsyncIOMotorDatabase
 from superdesk.commands.data_updates import BaseDataUpdate
 from newsroom.companies import CompanyServiceAsync
-from pymongo import UpdateOne
 
 
 class DataUpdate(BaseDataUpdate):
@@ -23,7 +22,6 @@ class DataUpdate(BaseDataUpdate):
     ) -> None:
         products = await collection.find({}).to_list(length=1000)
         companies = await CompanyServiceAsync().get_all_raw_as_list()
-        updates = []
         for company in companies:
             update: dict[str, Any] = {}
             if "products" not in company:
@@ -46,12 +44,9 @@ class DataUpdate(BaseDataUpdate):
                 }
 
             if update:
-                updates.append(UpdateOne({"_id": company.get("_id")}, {"$set": update}))
-            if len(updates) >= 500:
-                updates = []
-
-        if updates:
-            pass
+                await CompanyServiceAsync().mongo_async.update_one(
+                    {"_id": company.get("_id")}, {"$set": update}
+                )
 
     async def backwards(
         self, collection: AsyncIOMotorCollection, database: AsyncIOMotorDatabase
