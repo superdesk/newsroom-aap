@@ -9,6 +9,16 @@ from newsroom.web.default_settings import (
     CORE_APPS,
 )
 
+if os.environ.get("NEW_RELIC_LICENSE_KEY"):
+    try:
+        import newrelic.agent
+
+        newrelic.agent.initialize(
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "newrelic.ini"))
+        )
+    except ImportError:
+        pass
+
 if os.environ.get("PUSH"):
     BLUEPRINTS = blueprints
 else:
@@ -75,6 +85,7 @@ CLIENT_CONFIG.update(
     {
         "multimedia_website_search_url": MULTIMEDIA_WEBSITE_SEARCH_URL,
         "display_all_versions_toggle": False,
+        "agenda_top_story_scheme": "",
         "list_animations": False,
         "date_format": "d/MMM/YYYY",
         "advanced_search": {
@@ -111,7 +122,7 @@ NEWS_API_ENABLED = strtobool(os.environ.get("NEWS_API_ENABLED", "false"))
 ALLOW_PICTURE_DOWNLOAD = strtobool(os.environ.get("ALLOW_PICTURE_DOWNLOAD", "false"))
 WIRE_EMBED_PERMISSIONS = strtobool(os.environ.get("WIRE_EMBED_PERMISSIONS", "true"))
 USE_EMBED_PERMISSIONS_IN_DASHBOARD = strtobool(
-    os.environ.get("WIRE_EMBED_PERMISSIONS", "false")
+    os.environ.get("WIRE_EMBED_PERMISSIONS", "true")
 )
 
 WIRE_TIME_FILTERS = [
