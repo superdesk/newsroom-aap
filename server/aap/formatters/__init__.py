@@ -1,0 +1,4 @@
+from newsroom.formatters import register_formatter
+from .ninjs_formatter_three import NINJSFormatter3
+
+register_formatter(NINJSFormatter3)
