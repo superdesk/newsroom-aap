@@ -86,6 +86,7 @@ CLIENT_CONFIG.update(
         "multimedia_website_search_url": MULTIMEDIA_WEBSITE_SEARCH_URL,
         "display_all_versions_toggle": False,
         "agenda_top_story_scheme": "",
+        "wire_labels_scheme": "",
         "list_animations": False,
         "date_format": "d/MMM/YYYY",
         "advanced_search": {
