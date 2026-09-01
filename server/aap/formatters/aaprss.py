@@ -22,7 +22,7 @@ from newsroom.types import SectionEnum
 from newsroom.wire import WireSearchServiceAsync
 from newsroom.wire.embeds import apply_company_permissions_to_embeds, update_embed_urls
 from newsroom.news_api.news.search_service import NewsApiSearchServiceAsync
-
+from aap.formatters.types import RSSParams
 
 logger = logging.getLogger(__name__)
 
@@ -145,7 +145,9 @@ class AAPRSSFormatter(RSSFormatter):
 
         return feed, channel
 
-    async def format_feed(self, params: RSSArgs | None, request: Request) -> Response:
+    async def format_feed(
+        self, params: RSSParams | None, args: RSSArgs | None, request: Request
+    ) -> Response:
         xml_root: str = '<?xml version="1.0" encoding="UTF-8"?>'
         feed, channel = self.get_root_xml()
 
@@ -190,7 +192,9 @@ class AAPRSSFormatter(RSSFormatter):
                     [complete_item], SectionEnum.NEWS_API
                 )
                 entry = SubElement(channel, self.item_field)
-                await self.format_item(entry, complete_item, None)
+                await self.format_item(
+                    entry, complete_item, getattr(args, "token", None) if args else None
+                )
 
             except Exception as ex:
                 logger.exception("processing {} - {}".format(item.get("_id"), ex))
