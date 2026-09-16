@@ -161,8 +161,8 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
     date_range_filter = (
         '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"'
         % (
-            from_date.strftime("%Y-%m-%dT%H:%M:%S"),
-            to_date.strftime("%Y-%m-%dT%H:%M:%S"),
+            from_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            to_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
         )
     )
     keyword_filter = '"SearchKeywords":[%s{"Keyword":"%s","Operator":"AND"}]' % (
