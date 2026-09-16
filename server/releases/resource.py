@@ -13,7 +13,7 @@ class AAPReleaseResource(Resource):
             "bool": {
                 "must": [
                     {"term": {"service.code": {"value": "j"}}},
-                    {"terms": {"source": ["PRN", "GlobeNewswire"]}},
+                    {"terms": {"source": ["PRN", "GlobeNewswire", "AAPR"]}},
                     {"term": {"pubstatus": {"value": "usable"}}},
                     {"range": {"versioncreated": {"gte": "now-90d"}}},
                 ]
