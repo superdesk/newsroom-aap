@@ -159,7 +159,7 @@ def set_photo_coverage_href(coverage, planning_item, deliveries=[]):
         '{"Keyword":"NZN","Operator":"NOT"}, ' if content_type == "video" else ""
     )
     date_range_filter = (
-        '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"false"'
+        '"DateRange":[{"Start":"%s","End":"%s"}],"DateCreatedFilter":"true"'
         % (
             from_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
             to_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
