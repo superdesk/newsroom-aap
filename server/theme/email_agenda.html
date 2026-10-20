@@ -1,0 +1,187 @@
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f7f7f7; font-family: Arial, sans-serif;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <!-- Inner Content Table -->
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; padding: 20px; border-radius: 8px;">
+
+                <!-- Headline -->
+                <tr>
+                    <td style="padding-bottom: 20px;">
+                        <h1 style="font-size: 24px; color: #333333; margin: 0; line-height: 1.3;">
+                            {{ get_highlighted_field(item, ["headline", "name"]) | safe }}
+                        </h1>
+                    </td>
+                </tr>
+
+                <!-- Meta Info (Date & Location) -->
+                <tr>
+                    <td style="padding-bottom: 20px;">
+                        {% if item.event %}
+                            <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0; margin-bottom: 5px;">
+                                <strong>Date:</strong> {{ dateString }}
+                            </p>
+                        {% endif %}
+
+                        {% if location and location != '' %}
+                            <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0;">
+                                <strong>Where:</strong> {{ location }}
+                            </p>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <!-- Map -->
+                {% if map and map != '' %}
+                <tr>
+                    <td style="padding-bottom: 20px;">
+                        <img style="height: auto!important; max-width: 700px!important; width: 100%!important; border-radius: 4px;" src="{{ map | safe }}" alt="Event Map" />
+                    </td>
+                </tr>
+                {% endif %}
+
+                <!-- Description / Abstract -->
+                {% if item.definition_long or item.definition_short %}
+                <tr>
+                    <td style="padding-bottom: 20px;">
+                        <h3 style="font-size: 16px; color: #333333; margin-top: 0; margin-bottom: 10px; border-left: 3px solid #0056b3; padding-left: 10px;">
+                            Description
+                        </h3>
+                        <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0;">
+                            {{ get_highlighted_field(item, ["definition_long", "definition_short"]) | safe }}
+                        </p>
+                    </td>
+                </tr>
+                {% endif %}
+
+                <!-- Contacts -->
+                {% if contacts %}
+                <tr>
+                    <td style="padding-bottom: 20px;">
+                        <h3 style="font-size: 16px; color: #333333; margin-top: 0; margin-bottom: 10px; border-left: 3px solid #0056b3; padding-left: 10px;">
+                            Contact Information
+                        </h3>
+                        {% for contact in contacts %}
+                            <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0; margin-bottom: 5px;">
+                                <strong>{{ contact.name or contact.organisation }}</strong><br>
+                                {% if contact.phone %}Ph: {{ contact.phone }}<br>{% endif %}
+                                {% if contact.mobile %}Mob: {{ contact.mobile }}<br>{% endif %}
+                                {% if contact.email %}<a href="mailto:{{ contact.email }}" style="color: #0056b3; text-decoration: none;">{{ contact.email }}</a>{% endif %}
+                            </p>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+
+                <!-- Web Links -->
+                {% if links %}
+                <tr>
+                    <td style="padding-bottom: 20px;">
+                        <h3 style="font-size: 16px; color: #333333; margin-top: 0; margin-bottom: 10px; border-left: 3px solid #0056b3; padding-left: 10px;">
+                            Web Links
+                        </h3>
+                        {% for link in links %}
+                            <p style="font-size: 14px; line-height: 1.6; margin: 0; margin-bottom: 5px;">
+                                <a href="{{ link | safe }}" style="color: #0056b3; text-decoration: none;">{{ link }}</a>
+                            </p>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+
+                <!-- Planning Items -->
+                {% for planning_item in item.get('planning_items', []) or [] %}
+                <tr>
+                    <td style="padding-bottom: 20px; border-top: 1px solid #eeeeee; padding-top: 20px;">
+                        <h3 style="font-size: 16px; color: #333333; margin-top: 0; margin-bottom: 10px; border-left: 3px solid #0056b3; padding-left: 10px;">
+                            Planning Item
+                        </h3>
+
+                        {% if (planning_item.get('description_text') or planning_item.get('name') or '') != (item.definition_long or item.definition_short) %}
+                            <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0; margin-bottom: 10px;">
+                                {{ planning_item.get('description_text') or planning_item.get('name') or '' }}
+                            </p>
+                        {% endif %}
+
+                        {% if planning_item.get('ednote') %}
+                            <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0; margin-bottom: 10px;">
+                                <strong>Editorial Note:</strong> {{ planning_item.get('ednote') }}
+                            </p>
+                        {% endif %}
+
+                        {% if planning_item.get('coverages', []) %}
+                            <div style="background-color: #f7f7f7; padding: 10px; border-radius: 4px; margin-top: 10px;">
+                                <p style="font-size: 14px; line-height: 1.6; color: #333333; margin: 0; margin-bottom: 5px;">
+                                    <strong>Coverage:</strong>
+                                </p>
+                                {% for cov in get_planning_coverages(item, planning_item._id) %}
+                                    <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0;">
+                                        {{ get_coverage_email_text(cov, '', recipient_language) }}
+                                    </p>
+
+                                    {% if cov.get('planning', {}).get('ednote') %}
+                                        <p style="font-size: 13px; line-height: 1.4; color: #888888; margin: 0; font-style: italic;">
+                                            Note: {{ cov['planning']['ednote'] }}
+                                        </p>
+                                    {% endif %}
+
+                                    {% if is_admin and cov.get('planning', {}).get('internal_note') %}
+                                        <p style="font-size: 13px; line-height: 1.4; color: #888888; margin: 0; font-style: italic;">
+                                            Internal Note: {{ cov['planning']['internal_note'] }}
+                                        </p>
+                                    {% endif %}
+
+                                    {% if not loop.last %}<br>{% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <!-- Related Events -->
+                {% if related_events %}
+                <tr>
+                    <td style="padding-bottom: 20px; border-top: 1px solid #eeeeee; padding-top: 20px;">
+                        <h3 style="font-size: 16px; color: #333333; margin-top: 0; margin-bottom: 10px; border-left: 3px solid #0056b3; padding-left: 10px;">
+                            Related Events
+                        </h3>
+                        {% for event in related_events %}
+                            <div style="margin-bottom: 15px;">
+                                {% if event.headline or event.name %}
+                                    <p style="font-size: 14px; line-height: 1.6; color: #333333; margin: 0; font-weight: bold;">
+                                        {{ event.headline or event.name }}
+                                    </p>
+                                {% endif %}
+                                {% if event.slugline %}
+                                    <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0;">
+                                        <strong>Slugline:</strong> {{ event.slugline }}
+                                    </p>
+                                {% endif %}
+                                {% if event.definition_long %}
+                                    <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0; margin-top: 5px;">
+                                        {{ event.definition_long }}
+                                    </p>
+                                {% endif %}
+                                <p style="font-size: 14px; line-height: 1.6; margin: 0; margin-top: 5px;">
+                                    <a href="{{ url_for_agenda(event) | replace('http://', 'https://') }}" style="color: #0056b3; text-decoration: underline;">View Related Event</a>
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+
+                <!-- Call to Action Button -->
+                <tr>
+                    <td style="padding-top: 10px; border-top: 1px solid #eeeeee;">
+                        <a href="{{ url_for_agenda(item) | replace('http://', 'https://') }}"
+                           style="background-color: #0056b3; color: #ffffff; text-decoration: none; padding: 12px 25px; border-radius: 4px; display: inline-block; font-weight: bold; font-size: 15px; margin-top: 10px;">
+                            View Full Agenda
+                        </a>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
